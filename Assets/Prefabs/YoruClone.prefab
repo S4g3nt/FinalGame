@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &1842626785549067685
+--- !u!1001 &8160605143903591820
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,11 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1161700083885911726, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -2.43
       objectReference: {fileID: 0}
     - target: {fileID: 1161700083885911726, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.87
       objectReference: {fileID: 0}
     - target: {fileID: 1161700083885911726, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: m_LocalPosition.z
@@ -49,6 +49,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1972210185659715911, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
+      propertyPath: m_Size.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1972210185659715911, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1972210185659715911, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
       value: 1.4117647
       objectReference: {fileID: 0}
@@ -57,47 +65,69 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4834794979134238489, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4834794979134238489, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: ghostPrefab
       value: 
       objectReference: {fileID: 8787149846499474545, guid: d8b7875d69914e242ae0ff4148f04947, type: 3}
     - target: {fileID: 7614377362554569606, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: m_Name
-      value: Jett
+      value: YoruClone
+      objectReference: {fileID: 0}
+    - target: {fileID: 7614377362554569606, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
+      propertyPath: m_TagString
+      value: YoruClone
+      objectReference: {fileID: 0}
+    - target: {fileID: 7823433505352835630, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7823433505352835630, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.48
       objectReference: {fileID: 0}
     - target: {fileID: 8615052121603532358, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -1709672195847498974, guid: 2acc0a267df35054093cf824d0a177b2, type: 3}
-    m_RemovedComponents: []
+    - target: {fileID: 8615052121603532358, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8615052121603532358, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8615052121603532358, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 4834794979134238489, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7614377362554569606, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2902419512387938872}
+      addedObject: {fileID: 2290225334065420118}
   m_SourcePrefab: {fileID: 100100000, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
---- !u!1 &8086741524237444643 stripped
+--- !u!1 &1795802629504114186 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7614377362554569606, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
-  m_PrefabInstance: {fileID: 1842626785549067685}
+  m_PrefabInstance: {fileID: 8160605143903591820}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2902419512387938872
+--- !u!114 &2290225334065420118
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8086741524237444643}
+  m_GameObject: {fileID: 1795802629504114186}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7181ef0390e19494989ebea642539bc0, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b04b2b5d64d24f4e958718933cca3f5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::JettSkills
-  hoverFallSpeed: 2
-  airFlowParticles: {fileID: 0}
-  normalGhostColor: {r: 0.5, g: 0.8, b: 1, a: 0.5}
-  hoverGhostColor: {r: 1, g: 1, b: 1, a: 0.3}
-  dashSpeed: 15
-  dashDuration: 0.1
-  ghostPrefab: {fileID: 8787149846499474545, guid: d8b7875d69914e242ae0ff4148f04947, type: 3}
-  ghostSpawnInterval: 0.03
+  m_EditorClassIdentifier: Assembly-CSharp::YoruCloneLogic
+  moveSpeed: 5
