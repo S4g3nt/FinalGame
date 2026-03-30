@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private Color defaultColor; // 用来记录角色原本的颜色
+    private Coroutine hurtCoroutine; // 用来引用正在运行的变红协程
     [Header("移动参数")]
     public float moveSpeed = 6f;
     public float jumpForce = 12f;
@@ -88,6 +90,12 @@ public class PlayerController : MonoBehaviour
         
         BoxCollider2D box = GetComponent<BoxCollider2D>();
         if (box != null) box.size = new Vector2(0.9f, 2f);
+
+        sr = GetComponent<SpriteRenderer>();
+        if (sr != null)
+        {
+            defaultColor = sr.color; // 记录游戏开始时的颜色（通常是白色）
+        }
     }
 
     void Update()
@@ -254,4 +262,71 @@ public class PlayerController : MonoBehaviour
     public void EnableControls() => ControlsEnabled = true;
     public void DisableControls() => ControlsEnabled = false;
     public void SetControls(bool enabled) => ControlsEnabled = enabled;
+
+public void PlayHurtEffect(float duration)
+{
+    // 如果之前已经有一个红光协程在跑，先停掉它，防止冲突
+    if (hurtCoroutine != null) StopCoroutine(hurtCoroutine);
+    hurtCoroutine = StartCoroutine(HurtRoutine(duration));
+}
+
+private IEnumerator HurtRoutine(float duration)
+{
+    if (sr != null)
+    {
+        sr.color = Color.red; 
+        yield return new WaitForSeconds(duration);
+        sr.color = defaultColor; // 恢复到记录好的初始颜色
+    }
+    hurtCoroutine = null;
+}
+
+public void ResetColor()
+{
+    if (hurtCoroutine != null)
+    {
+        StopCoroutine(hurtCoroutine); // 停止变红协程
+        hurtCoroutine = null;
+    }
+    if (sr != null)
+    {
+        sr.color = defaultColor; // 强行变回初始颜色
+    }
+}
+
+    public void SetDeathVisual(bool isDead)
+{
+    if (isDead)
+    {
+        // 旋转 90 度（如果方向不对，可以改成 -90f）
+        transform.localEulerAngles = new Vector3(0, 0, 90f); 
+        
+        // 强制把动画速度设为 0，防止倒地了还在跑
+        if (anim != null) 
+        {
+            anim.SetFloat("Speed", 0f);
+            anim.SetBool("IsGrounded", true);
+        }
+    }
+    else
+    {
+        // 恢复正常角度
+        transform.localEulerAngles = Vector3.zero;
+    }
+}
+public void SetHurtColor(bool isHurt)
+
+{
+
+if (sr != null)
+
+{
+
+// 如果 isHurt 为 true 就变红，否则恢复初始颜色
+
+sr.color = isHurt ? Color.red : defaultColor;
+
+}
+
+}
 }

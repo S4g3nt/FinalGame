@@ -69,36 +69,46 @@ public class GameManager : MonoBehaviour
         StartCoroutine(RespawnSequence(player));
     }
 
-    IEnumerator RespawnSequence(GameObject player)
+IEnumerator RespawnSequence(GameObject player)
+{
+    // 1. 等待死亡瞬间的停顿（此时玩家是红色的）
+    yield return new WaitForSeconds(0.5f);
+
+    // 2. 屏幕变黑
+    if (fadeImage != null)
     {
-        yield return new WaitForSeconds(0.5f);
-
-        if (fadeImage != null)
+        while (fadeImage.color.a < 1f)
         {
-            while (fadeImage.color.a < 1f)
-            {
-                Color c = fadeImage.color;
-                c.a += Time.deltaTime * fadeSpeed;
-                fadeImage.color = c;
-                yield return null;
-            }
-        }
-
-        player.transform.position = lastCheckpointPos;
-        Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
-        if (rb != null) rb.linearVelocity = Vector2.zero;
-
-        yield return new WaitForSeconds(0.3f);
-
-        if (fadeImage != null)
-        {
-            while (fadeImage.color.a > 0f)
-            {
-                Color c = fadeImage.color;
-                c.a -= Time.deltaTime * fadeSpeed;
-                fadeImage.color = c;
-                yield return null;
-            }
+            Color c = fadeImage.color;
+            c.a += Time.deltaTime * fadeSpeed;
+            fadeImage.color = c;
+            yield return null;
         }
     }
+
+    // 3. 执行传送
+    player.transform.position = lastCheckpointPos;
+    
+    // 4. --- 核心：在这里恢复一切视觉状态 ---
+    PlayerController pc = player.GetComponent<PlayerController>();
+    if (pc != null)
+    {
+        pc.SetDeathVisual(false); // 站起来
+        pc.SetHurtColor(false);   // <--- 关键：在此处变回正常颜色
+        pc.EnableControls();      // 恢复操作
+    }
+
+    // 5. 屏幕变亮
+    yield return new WaitForSeconds(0.3f);
+    if (fadeImage != null)
+    {
+        while (fadeImage.color.a > 0f)
+        {
+            Color c = fadeImage.color;
+            c.a -= Time.deltaTime * fadeSpeed;
+            fadeImage.color = c;
+            yield return null;
+        }
+    }
+}
 }
