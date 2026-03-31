@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &8160605143903591820
+--- !u!1001 &2532388896945130401
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,11 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1161700083885911726, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.43
+      value: -19.467577
       objectReference: {fileID: 0}
     - target: {fileID: 1161700083885911726, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.87
+      value: 3.8483403
       objectReference: {fileID: 0}
     - target: {fileID: 1161700083885911726, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: m_LocalPosition.z
@@ -49,24 +49,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1972210185659715911, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
-      propertyPath: m_Size.x
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1972210185659715911, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
-      propertyPath: m_Size.y
-      value: 2
+      propertyPath: m_IsTrigger
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1972210185659715911, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
-      value: 1.4117647
+      value: 1.1764706
       objectReference: {fileID: 0}
     - target: {fileID: 1972210185659715911, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.y
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4834794979134238489, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4834794979134238489, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: ghostPrefab
@@ -74,60 +66,74 @@ PrefabInstance:
       objectReference: {fileID: 8787149846499474545, guid: d8b7875d69914e242ae0ff4148f04947, type: 3}
     - target: {fileID: 7614377362554569606, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: m_Name
-      value: YoruClone
-      objectReference: {fileID: 0}
-    - target: {fileID: 7614377362554569606, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
-      propertyPath: m_TagString
-      value: YoruClone
+      value: Yoru 1
       objectReference: {fileID: 0}
     - target: {fileID: 7823433505352835630, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.1
+      value: -0.127
       objectReference: {fileID: 0}
     - target: {fileID: 7823433505352835630, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.48
+      value: -0.941
       objectReference: {fileID: 0}
     - target: {fileID: 8615052121603532358, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -1709672195847498974, guid: 2acc0a267df35054093cf824d0a177b2, type: 3}
-    - target: {fileID: 8615052121603532358, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
-      propertyPath: m_Color.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8615052121603532358, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
-      propertyPath: m_Color.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8615052121603532358, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
-      propertyPath: m_Color.r
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 4834794979134238489, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
+      objectReference: {fileID: 3111458190839584047, guid: 4139c348aed06ef4799bdf6336bb4b48, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7614377362554569606, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2290225334065420118}
+      addedObject: {fileID: 2668471062938023493}
+    - targetCorrespondingSourceObject: {fileID: 7614377362554569606, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1436771840283877871}
   m_SourcePrefab: {fileID: 100100000, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
---- !u!1 &1795802629504114186 stripped
+--- !u!1 &5372628975645984807 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7614377362554569606, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
-  m_PrefabInstance: {fileID: 8160605143903591820}
+  m_PrefabInstance: {fileID: 2532388896945130401}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2290225334065420118
+--- !u!114 &2668471062938023493
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1795802629504114186}
+  m_GameObject: {fileID: 5372628975645984807}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b04b2b5d64d24f4e958718933cca3f5, type: 3}
+  m_Script: {fileID: 11500000, guid: b5cd10d8f21f8a243baeb778d0ec565c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::YoruCloneLogic
-  moveSpeed: 5
+  m_EditorClassIdentifier: Assembly-CSharp::YoruSkills
+  anchorKey: 108
+  cloneKey: 106
+  anchorPrefab: {fileID: 6736421596801448714, guid: 99de2b42172f7c642bbb9b2c4ad0f3f3, type: 3}
+  clonePrefab: {fileID: 4896532684680704518, guid: d785e0c181f025340a8542827b4966c8, type: 3}
+  spawnOffset: 1.5
+  cloneHeightOffset: 0.2
+  anchorHeightOffset: -0.9
+--- !u!95 &1436771840283877871
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5372628975645984807}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: abb34e8b2095061419777a17e0dbdd4b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

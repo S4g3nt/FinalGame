@@ -6,6 +6,7 @@ public class YoruCloneLogic : MonoBehaviour
     [Header("假人设置")]
     public float moveSpeed = 5f;
     public float duration = 5f; 
+    private Animator anim;
     
     [HideInInspector] // 在编辑器里隐藏，由脚本控制
     public bool isMoving = false; 
@@ -15,8 +16,12 @@ public class YoruCloneLogic : MonoBehaviour
 
     void Start()
     {
+
         rb = GetComponent<Rigidbody2D>();
         // 初始方向逻辑不变
+        anim = GetComponent<Animator>(); // 获取动画机组件
+        anim.SetBool("isMoving", false);
+        
         moveDirection = -Mathf.Sign(transform.localScale.x);
         
         // 注意：这里删掉了 Start 里的 Destroy 代码，因为我们要在激活后才开始倒计时
@@ -29,6 +34,12 @@ public class YoruCloneLogic : MonoBehaviour
         {
             isMoving = true;
             // 激活时才开始计算寿命倒计时
+            if (anim != null) 
+            {
+
+                // 方案 B：如果你用的是 Bool (布尔值)
+                anim.SetBool("isMoving", true);
+            }
             Destroy(gameObject, duration);
         }
     }
