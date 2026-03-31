@@ -14,9 +14,11 @@ public class PlayerController : MonoBehaviour
     public float externalKnockbackHorizontalDecay = 0.88f;
 
     [Header("地面检测")]
-    public Transform groundCheck; 
-    public float checkRadius = 0.2f;
-    public LayerMask groundLayer; 
+    [Tooltip("检测中心，建议放在两脚之间的正下方")]
+    public Transform groundCheck;
+    [Tooltip("检测盒完整尺寸：X 略大于两脚跨度（解决平台边缘点检测不到），Y 很扁")]
+    public Vector2 groundCheckBoxSize = new Vector2(0.72f, 0.08f);
+    public LayerMask groundLayer;
 
     [Header("控制状态")]
     [SerializeField] private bool controlsEnabled = true; 
@@ -71,7 +73,14 @@ public class PlayerController : MonoBehaviour
     {
         // 【核心修复】：将地面检测移到最前面！
         // 无论玩家是否被技能锁死，地面检测必须每帧实时执行，防止状态滞后。
-        IsGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
+        if (groundCheck == null)
+            IsGrounded = false;
+        else
+        {
+            Vector2 center = groundCheck.position;
+            float angle = groundCheck.eulerAngles.z;
+            IsGrounded = Physics2D.OverlapBox(center, groundCheckBoxSize, angle, groundLayer) != null;
+        }
         if (Anim != null) Anim.SetBool("IsGrounded", IsGrounded);
 
         if (!ControlsEnabled)
@@ -181,5 +190,15 @@ public class PlayerController : MonoBehaviour
     public void SetHurtColor(bool isHurt)
     {
         if (Sr != null) Sr.color = isHurt ? Color.red : defaultColor;
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if (groundCheck == null) return;
+        Gizmos.color = Application.isPlaying && IsGrounded ? Color.cyan : Color.yellow;
+        Matrix4x4 prev = Gizmos.matrix;
+        Gizmos.matrix = Matrix4x4.TRS(groundCheck.position, Quaternion.Euler(0f, 0f, groundCheck.eulerAngles.z), Vector3.one);
+        Gizmos.DrawWireCube(Vector3.zero, new Vector3(groundCheckBoxSize.x, groundCheckBoxSize.y, 0.01f));
+        Gizmos.matrix = prev;
     }
 }

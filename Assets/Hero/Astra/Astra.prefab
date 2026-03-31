@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 7892580070860134165}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.1, y: -0.95, z: 0}
+  m_LocalPosition: {x: -0.012, y: -1.042, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -170,8 +170,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   moveSpeed: 8
   jumpForce: 12
+  externalKnockbackHorizontalDecay: 0.88
   groundCheck: {fileID: 8430800207632156555}
-  checkRadius: 0.2
+  groundCheckBoxSize: {x: 0.7, y: 0.08}
   groundLayer:
     serializedVersion: 2
     m_Bits: 2147483648

@@ -142,7 +142,7 @@ MonoBehaviour:
   jumpForce: 12
   externalKnockbackHorizontalDecay: 0.88
   groundCheck: {fileID: 1826049745317809599}
-  checkRadius: 0.2
+  groundCheckBoxSize: {x: 0.72, y: 0.08}
   groundLayer:
     serializedVersion: 2
     m_Bits: 2147483648
