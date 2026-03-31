@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 106c9213cdf551f4eac4c829c385e597
+guid: 6b416949420747644a200867a4d8eaeb
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -581286770295223724
-    second: J_0
+      213: -7848039375673857549
+    second: Dash_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: J_0
+      name: Dash_0
       rect:
         serializedVersion: 2
-        x: 7
-        y: 7
-        width: 66
-        height: 66
+        x: 0
+        y: 0
+        width: 1238
+        height: 614
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 45a4bef13cadee7f0800000000000000
-      internalID: -581286770295223724
+      spriteID: 3f96eadb4c9261390800000000000000
+      internalID: -7848039375673857549
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      J_0: -581286770295223724
+      Dash_0: -7848039375673857549
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
