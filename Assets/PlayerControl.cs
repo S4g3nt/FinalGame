@@ -85,13 +85,16 @@ public class PlayerController : MonoBehaviour
         UpdateCommonPhysicsAndAnimation(moveInput);
 
         if (Input.GetKeyDown(KeyCode.K))
-{
-    Debug.Log($"尝试跳跃! 地面状态: {IsGrounded}, 控制锁定: {IsSkillLocked}");
-    if (IsGrounded && !IsSkillLocked)
-    {
-        Rb.linearVelocity = new Vector2(Rb.linearVelocity.x, jumpForce);
-    }
-}
+        {
+            Debug.Log($"尝试跳跃! 地面状态: {IsGrounded}, 控制锁定: {IsSkillLocked}");
+            if (IsGrounded && !IsSkillLocked)
+            {
+                // 与 Physics2D.gravity * gravityScale 相反的方向起跳（支持 Astra 反重力）
+                float gy = Physics2D.gravity.y * Rb.gravityScale;
+                float jumpY = Mathf.Approximately(gy, 0f) ? jumpForce : -Mathf.Sign(gy) * Mathf.Abs(jumpForce);
+                Rb.linearVelocity = new Vector2(Rb.linearVelocity.x, jumpY);
+            }
+        }
     }
 
     void UpdateCommonPhysicsAndAnimation(float hInput)

@@ -98,6 +98,10 @@ IEnumerator RespawnSequence(GameObject player)
         pc.EnableControls();      // 恢复操作
     }
 
+    AstraSkills astra = player.GetComponent<AstraSkills>();
+    if (astra != null)
+        astra.ResetToNormalGravity();
+
     // 5. 屏幕变亮
     yield return new WaitForSeconds(0.3f);
     if (fadeImage != null)

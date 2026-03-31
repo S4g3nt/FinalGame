@@ -62,15 +62,7 @@ PrefabInstance:
       objectReference: {fileID: 8787149846499474545, guid: d8b7875d69914e242ae0ff4148f04947, type: 3}
     - target: {fileID: 7614377362554569606, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: m_Name
-      value: Jett
-      objectReference: {fileID: 0}
-    - target: {fileID: 7823433505352835630, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.128
-      objectReference: {fileID: 0}
-    - target: {fileID: 7823433505352835630, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.964
+      value: astratest
       objectReference: {fileID: 0}
     - target: {fileID: 8615052121603532358, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: m_Sprite
@@ -83,6 +75,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7614377362554569606, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2902419512387938872}
+    - targetCorrespondingSourceObject: {fileID: 7614377362554569606, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -2036604819423668067}
   m_SourcePrefab: {fileID: 100100000, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
 --- !u!1 &8086741524237444643 stripped
 GameObject:
@@ -96,7 +91,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8086741524237444643}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7181ef0390e19494989ebea642539bc0, type: 3}
   m_Name: 
@@ -109,3 +104,17 @@ MonoBehaviour:
   dashDuration: 0.1
   ghostPrefab: {fileID: 8787149846499474545, guid: d8b7875d69914e242ae0ff4148f04947, type: 3}
   ghostSpawnInterval: 0.03
+--- !u!114 &-2036604819423668067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8086741524237444643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bd463f2d406d3941a971235d2ce8167, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AstraSkills
+  gravityToggleKey: 113
+  flipSpriteWhenInverted: 1
