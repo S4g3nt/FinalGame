@@ -60,9 +60,7 @@ public class YoruCloneLogic : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("DeathZone"))
-        {
+        if (collision != null && collision.gameObject.CompareTag("DeathZone"))
             Destroy(gameObject);
-        }
     }
 }

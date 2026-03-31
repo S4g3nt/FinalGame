@@ -40,6 +40,7 @@ public class YoruSkills : MonoBehaviour
                 Vector3 spawnPosition = GetSpawnPositionFront(anchorHeightOffset); 
                 currentAnchor = Instantiate(anchorPrefab, spawnPosition, Quaternion.identity);
                 SyncDirection(currentAnchor);
+                TryIgnoreAnchorCloneCollisions();
             }
             else
             {
@@ -65,6 +66,7 @@ public class YoruSkills : MonoBehaviour
                 // 确保它刚出来时是不动的
                 YoruCloneLogic logic = currentClone.GetComponent<YoruCloneLogic>();
                 if (logic != null) logic.isMoving = false;
+                TryIgnoreAnchorCloneCollisions();
             }
             // 情况2：场上已经有一个假人 -> 检查它是否处于静止状态，如果是，则释放它
             else
@@ -93,5 +95,23 @@ public class YoruSkills : MonoBehaviour
         Vector3 newScale = spawnedObject.transform.localScale;
         newScale.x = Mathf.Abs(newScale.x) * Mathf.Sign(transform.localScale.x);
         spawnedObject.transform.localScale = newScale;
+    }
+
+    /// <summary>锚点与假身互不阻挡，仍与地形等实体正常碰撞。</summary>
+    private void TryIgnoreAnchorCloneCollisions()
+    {
+        if (currentAnchor == null || currentClone == null) return;
+
+        Collider2D[] a = currentAnchor.GetComponentsInChildren<Collider2D>(true);
+        Collider2D[] b = currentClone.GetComponentsInChildren<Collider2D>(true);
+        foreach (Collider2D ca in a)
+        {
+            if (ca == null || !ca.enabled || ca.isTrigger) continue;
+            foreach (Collider2D cb in b)
+            {
+                if (cb == null || !cb.enabled || cb.isTrigger) continue;
+                Physics2D.IgnoreCollision(ca, cb, true);
+            }
+        }
     }
 }

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7231052619063859968}
   m_Layer: 0
   m_Name: Spike
-  m_TagString: Untagged
+  m_TagString: DeathZone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

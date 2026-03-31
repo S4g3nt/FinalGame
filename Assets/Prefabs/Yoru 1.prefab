@@ -110,7 +110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::YoruSkills
   anchorKey: 108
   cloneKey: 106
-  anchorPrefab: {fileID: 6736421596801448714, guid: 99de2b42172f7c642bbb9b2c4ad0f3f3, type: 3}
+  anchorPrefab: {fileID: 1703708849082361541, guid: 519f00e9072cce544aba7e43a30d34a1, type: 3}
   clonePrefab: {fileID: 4896532684680704518, guid: d785e0c181f025340a8542827b4966c8, type: 3}
   spawnOffset: 1.5
   cloneHeightOffset: 0.2

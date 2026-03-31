@@ -26,4 +26,10 @@ public class YoruAnchorLogic : MonoBehaviour
         // 给锚点一个向前的速度，保留 Y 轴速度让它能受重力贴地
         rb.linearVelocity = new Vector2(moveDirection * moveSpeed, rb.linearVelocity.y);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision != null && collision.gameObject.CompareTag("DeathZone"))
+            Destroy(gameObject);
+    }
 }
