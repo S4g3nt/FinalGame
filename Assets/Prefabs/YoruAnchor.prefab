@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7746822145499557909}
   - component: {fileID: 7854374272087881010}
   - component: {fileID: 3664144829471794975}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: YoruAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
