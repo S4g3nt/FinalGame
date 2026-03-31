@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8154321098765432103}
   - component: {fileID: 8154321098765432104}
   - component: {fileID: 8154321098765432105}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: SpringPad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8d4c1f2a09b4736c5d8e1f2a0b3c4d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpringPad
-  bounceVelocityY: 16
+  bounceVelocityY: 18
   maxUpwardSpeedToAccept: 0.5
   cooldownPerTarget: 0.25
 --- !u!212 &8154321098765432104
@@ -142,7 +142,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.0005993843, y: 0.52058685}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -152,5 +152,5 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.9844167, y: 0.013624907}
   m_EdgeRadius: 0

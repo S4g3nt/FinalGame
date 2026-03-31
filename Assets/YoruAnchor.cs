@@ -27,9 +27,9 @@ public class YoruAnchorLogic : MonoBehaviour
         rb.linearVelocity = new Vector2(moveDirection * moveSpeed, rb.linearVelocity.y);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision != null && collision.gameObject.CompareTag("DeathZone"))
-            Destroy(gameObject);
-    }
+    // private void OnTriggerEnter2D(Collider2D collision)
+    // {
+    //     if (collision != null && collision.gameObject.CompareTag("DeathZone"))
+    //         Destroy(gameObject);
+    // }
 }

@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System.Collections;
 public class JetSkills : MonoBehaviour
 {
     [Header("技能设置")]
@@ -28,6 +28,7 @@ public class JetSkills : MonoBehaviour
     // ==== 核心技能状态 ====
     // 缓降
     private bool isFloated = false;
+    private bool isWaitingForDash = false;
     private float originalGravityScale; // 用于存储原始重力值
     
     // 冲刺
@@ -139,19 +140,50 @@ public class JetSkills : MonoBehaviour
     // ==================== 冲刺逻辑 ====================
     private void HandleDashInput()
     {
-        // 如果按下E键，且可以冲刺，且不在冲刺过程中
-        if (Input.GetKeyDown(KeyCode.E) && dashState && !isDashing)
+        // 1. 改为 KeyCode.L
+        // 2. 增加 !isWaitingForDash 防止重复触发协程
+        if (Input.GetKeyDown(KeyCode.L) && dashState && !isDashing && !isWaitingForDash)
         {
-            // 计算冲刺方向
-            Vector2 desiredDirection = CalculateDashDirection();
-            
-            if (desiredDirection != Vector2.zero)
-            {
-                StartDash(desiredDirection);
-            }
+            StartCoroutine(DashDirectionBufferRoutine());
         }
     }
-    
+    private IEnumerator DashDirectionBufferRoutine()
+    {
+        isWaitingForDash = true;
+        Vector2 capturedDir = Vector2.zero;
+
+        // 关键：循环 2 帧
+        for (int i = 0; i < 2; i++)
+        {
+            float h = Input.GetAxisRaw("Horizontal");
+            float v = Input.GetAxisRaw("Vertical");
+
+            // 只要这 2 帧内有任何一帧按了方向，就记录下来
+            if (h != 0 || v != 0) 
+            {
+                capturedDir = new Vector2(h, v);
+            }
+            yield return null; // 等待下一帧
+        }
+
+        // 2 帧结束，确定最终方向
+        Vector2 finalDir = Vector2.zero;
+        if (capturedDir != Vector2.zero)
+        {
+            if (capturedDir.x > 0) finalDir.x = 1;
+            else if (capturedDir.x < 0) finalDir.x = -1;
+            if (capturedDir.y > 0) finalDir.y = 1;
+            else if (capturedDir.y < 0) finalDir.y = -1;
+        }
+        else
+        {
+            // 默认朝向逻辑
+            finalDir = (transform.localScale.x > 0) ? Vector2.left : Vector2.right;
+        }
+
+        isWaitingForDash = false;
+        StartDash(finalDir.normalized); // 正式开始冲刺
+    }    
     private Vector2 CalculateDashDirection()
     {
         Vector2 direction = Vector2.zero;
