@@ -21,7 +21,8 @@ public class Region : MonoBehaviour
     {
         if (other.CompareTag("Hero"))
         {
-            RegionManager.Instance.PlayerInRegion(this);
+            // RegionManager.Instance.PlayerInRegion(this);
+            // 记得调回来！！！！！！！！！！！！！！！！！！
         }
     }
     

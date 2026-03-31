@@ -44,7 +44,7 @@ public class JettSkills : MonoBehaviour
         if (isDashing) return; 
 
         // 1. 获取缓降输入
-        isHovering = Input.GetKey(KeyCode.Space);
+        isHovering = Input.GetKey(KeyCode.J);
 
         // 2. 落地刷新冲刺
         if (player.IsGrounded && !isDashing)
