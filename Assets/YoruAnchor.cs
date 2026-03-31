@@ -27,9 +27,15 @@ public class YoruAnchorLogic : MonoBehaviour
         rb.linearVelocity = new Vector2(moveDirection * moveSpeed, rb.linearVelocity.y);
     }
 
-    // private void OnTriggerEnter2D(Collider2D collision)
-    // {
-    //     if (collision != null && collision.gameObject.CompareTag("DeathZone"))
-    //         Destroy(gameObject);
-    // }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision == null || !collision.gameObject.CompareTag("DeathZone"))
+            return;
+
+        // 尖刺等与下落坑共用 DeathZone 标签，但挂 SpikeTrap：允许锚点穿过，便于落在本体过不去的位置
+        if (collision.GetComponentInParent<SpikeTrap>() != null)
+            return;
+
+        Destroy(gameObject);
+    }
 }

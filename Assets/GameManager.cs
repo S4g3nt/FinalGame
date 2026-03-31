@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    private const string HeroTag = "Hero";
+
     [Header("复活设置")]
     public Vector3 lastCheckpointPos;
     public Image fadeImage;
@@ -66,53 +68,65 @@ public class GameManager : MonoBehaviour
 
     public void StartRespawn(GameObject player)
     {
+        if (player == null) return;
+        // 已在复活流程中（标签已剥掉）：忽略重复死亡，避免叠加重叠渐隐
+        if (!player.CompareTag(HeroTag)) return;
+
+        player.tag = "Untagged";
         StartCoroutine(RespawnSequence(player));
     }
 
-IEnumerator RespawnSequence(GameObject player)
-{
-    // 1. 等待死亡瞬间的停顿（此时玩家是红色的）
-    yield return new WaitForSeconds(0.5f);
-
-    // 2. 屏幕变黑
-    if (fadeImage != null)
+    IEnumerator RespawnSequence(GameObject player)
     {
-        while (fadeImage.color.a < 1f)
+        if (player == null) yield break;
+
+        // 1. 等待死亡瞬间的停顿（此时玩家是红色的）
+        yield return new WaitForSeconds(0.5f);
+        if (player == null) yield break;
+
+        // 2. 屏幕变黑
+        if (fadeImage != null)
         {
-            Color c = fadeImage.color;
-            c.a += Time.deltaTime * fadeSpeed;
-            fadeImage.color = c;
-            yield return null;
+            while (fadeImage.color.a < 1f)
+            {
+                Color c = fadeImage.color;
+                c.a += Time.deltaTime * fadeSpeed;
+                fadeImage.color = c;
+                yield return null;
+            }
+        }
+
+        if (player == null) yield break;
+
+        // 3. 执行传送
+        player.transform.position = lastCheckpointPos;
+
+        // 4. --- 核心：在这里恢复一切视觉状态 ---
+        PlayerController pc = player.GetComponent<PlayerController>();
+        if (pc != null)
+        {
+            pc.SetDeathVisual(false); // 站起来
+            pc.SetHurtColor(false);   // <--- 关键：在此处变回正常颜色
+            pc.EnableControls();      // 恢复操作
+        }
+
+        AstraSkills astra = player.GetComponent<AstraSkills>();
+        if (astra != null)
+            astra.ResetToNormalGravity();
+
+        player.tag = HeroTag;
+
+        // 5. 屏幕变亮
+        yield return new WaitForSeconds(0.3f);
+        if (fadeImage != null)
+        {
+            while (fadeImage.color.a > 0f)
+            {
+                Color c = fadeImage.color;
+                c.a -= Time.deltaTime * fadeSpeed;
+                fadeImage.color = c;
+                yield return null;
+            }
         }
     }
-
-    // 3. 执行传送
-    player.transform.position = lastCheckpointPos;
-    
-    // 4. --- 核心：在这里恢复一切视觉状态 ---
-    PlayerController pc = player.GetComponent<PlayerController>();
-    if (pc != null)
-    {
-        pc.SetDeathVisual(false); // 站起来
-        pc.SetHurtColor(false);   // <--- 关键：在此处变回正常颜色
-        pc.EnableControls();      // 恢复操作
-    }
-
-    AstraSkills astra = player.GetComponent<AstraSkills>();
-    if (astra != null)
-        astra.ResetToNormalGravity();
-
-    // 5. 屏幕变亮
-    yield return new WaitForSeconds(0.3f);
-    if (fadeImage != null)
-    {
-        while (fadeImage.color.a > 0f)
-        {
-            Color c = fadeImage.color;
-            c.a -= Time.deltaTime * fadeSpeed;
-            fadeImage.color = c;
-            yield return null;
-        }
-    }
-}
 }
