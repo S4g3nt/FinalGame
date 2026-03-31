@@ -9,6 +9,9 @@ public class PlayerController : MonoBehaviour
     [Header("移动参数")]
     public float moveSpeed = 6f;
     public float jumpForce = 12f;
+    [Tooltip("爆炸等效果叠在水平速度上的额外量，每 FixedUpdate 乘该系数衰减（避免与行走覆盖冲突）")]
+    [Range(0f, 1f)]
+    public float externalKnockbackHorizontalDecay = 0.88f;
 
     [Header("地面检测")]
     public Transform groundCheck; 
@@ -45,7 +48,9 @@ public class PlayerController : MonoBehaviour
     public Vector2 RawInput { get; private set; }
     
     private float moveInput;
-    private float verticalInput; 
+    private float verticalInput;
+    /// <summary>由炸药包等写入；FixedUpdate 中与 moveInput*moveSpeed 相加后再写入刚体，避免每帧被行走逻辑覆盖。</summary>
+    float horizontalKnockback;
 
     void Start()
     {
@@ -106,11 +111,23 @@ public class PlayerController : MonoBehaviour
         // 原本在这里的 IsGrounded 检测已经被移到了 Update 最上方
     }
 
+    /// <summary>水平额外速度写入缓冲；竖直分量立即加到刚体（行走不覆盖 y）。</summary>
+    public void ApplyExternalKnockback(Vector2 delta)
+    {
+        if (Rb == null) return;
+        horizontalKnockback += delta.x;
+        Rb.linearVelocity = new Vector2(Rb.linearVelocity.x, Rb.linearVelocity.y + delta.y);
+    }
+
     void FixedUpdate()
     {
         if (!ControlsEnabled || IsSkillLocked) return;
-        
-        Rb.linearVelocity = new Vector2(moveInput * moveSpeed, Rb.linearVelocity.y);
+
+        float walkX = moveInput * moveSpeed;
+        Rb.linearVelocity = new Vector2(walkX + horizontalKnockback, Rb.linearVelocity.y);
+        horizontalKnockback *= externalKnockbackHorizontalDecay;
+        if (Mathf.Abs(horizontalKnockback) < 0.02f)
+            horizontalKnockback = 0f;
     }
 
     public void EnableControls() => ControlsEnabled = true;
