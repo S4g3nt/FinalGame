@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum PressureButtonMode
@@ -22,7 +23,8 @@ public class PressureButton : MonoBehaviour
     [SerializeField] GameObject visualPressed;
 
     bool _latched;
-    int _occupants;
+    /// <summary>当前在触发区内且满足 IsActivator 的碰撞体（用于 Hold，及假人从“预制体→释放”后仍在按钮上的情况）。</summary>
+    readonly HashSet<Collider2D> _activeOccupants = new HashSet<Collider2D>();
 
     void Start()
     {
@@ -31,9 +33,30 @@ public class PressureButton : MonoBehaviour
             targetDoor.SetOpen(false);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other) => TryRegisterActivator(other);
+
+    /// <summary>
+    /// 假人先在按钮上再激活时不会再次触发 Enter，需在 Stay 里把“刚变为有效”的碰撞体补登记。
+    /// </summary>
+    void OnTriggerStay2D(Collider2D other) => TryRegisterActivator(other);
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (!_activeOccupants.Remove(other)) return;
+        if (mode == PressureButtonMode.Latch) return;
+
+        if (_activeOccupants.Count == 0)
+        {
+            ApplyButtonVisual(false);
+            if (targetDoor != null) targetDoor.SetOpen(false);
+        }
+    }
+
+    void TryRegisterActivator(Collider2D other)
     {
         if (!IsActivator(other)) return;
+
+        if (!_activeOccupants.Add(other)) return;
 
         if (mode == PressureButtonMode.Latch)
         {
@@ -44,24 +67,10 @@ public class PressureButton : MonoBehaviour
             return;
         }
 
-        _occupants++;
-        if (_occupants == 1)
+        if (_activeOccupants.Count == 1)
         {
             ApplyButtonVisual(true);
             if (targetDoor != null) targetDoor.SetOpen(true);
-        }
-    }
-
-    void OnTriggerExit2D(Collider2D other)
-    {
-        if (!IsActivator(other)) return;
-        if (mode == PressureButtonMode.Latch) return;
-
-        _occupants = Mathf.Max(0, _occupants - 1);
-        if (_occupants == 0)
-        {
-            ApplyButtonVisual(false);
-            if (targetDoor != null) targetDoor.SetOpen(false);
         }
     }
 
@@ -76,8 +85,15 @@ public class PressureButton : MonoBehaviour
     {
         if (col == null) return false;
         if (col.CompareTag("Hero")) return true;
-        if (col.CompareTag("YoruClone")) return true;
-        if (col.GetComponent<YoruCloneLogic>() != null) return true;
+        if (col.CompareTag("YoruClone"))
+        {
+            // 两阶段假人：预制体阶段不触发按钮；释放后（isMoving=true）才触发
+            var logic = col.GetComponent<YoruCloneLogic>();
+            return logic == null || logic.isMoving;
+        }
+
+        var cloneLogic = col.GetComponent<YoruCloneLogic>();
+        if (cloneLogic != null) return cloneLogic.isMoving;
         return false;
     }
 }

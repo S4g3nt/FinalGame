@@ -97,13 +97,36 @@ public class YoruSkills : MonoBehaviour
         spawnedObject.transform.localScale = newScale;
     }
 
-    /// <summary>锚点与假身互不阻挡，仍与地形等实体正常碰撞。</summary>
+    /// <summary>
+    /// 让 Yoru 本体、锚点、假人互相不阻挡（仍与地形等实体正常碰撞）。
+    /// </summary>
     private void TryIgnoreAnchorCloneCollisions()
     {
-        if (currentAnchor == null || currentClone == null) return;
+        Collider2D[] heroCols = GetComponentsInChildren<Collider2D>(true);
 
-        Collider2D[] a = currentAnchor.GetComponentsInChildren<Collider2D>(true);
-        Collider2D[] b = currentClone.GetComponentsInChildren<Collider2D>(true);
+        if (currentAnchor != null)
+        {
+            Collider2D[] anchorCols = currentAnchor.GetComponentsInChildren<Collider2D>(true);
+            IgnoreCollisionPairs(heroCols, anchorCols);
+        }
+
+        if (currentClone != null)
+        {
+            Collider2D[] cloneCols = currentClone.GetComponentsInChildren<Collider2D>(true);
+            IgnoreCollisionPairs(heroCols, cloneCols);
+        }
+
+        if (currentAnchor != null && currentClone != null)
+        {
+            Collider2D[] anchorCols = currentAnchor.GetComponentsInChildren<Collider2D>(true);
+            Collider2D[] cloneCols = currentClone.GetComponentsInChildren<Collider2D>(true);
+            IgnoreCollisionPairs(anchorCols, cloneCols);
+        }
+    }
+
+    private static void IgnoreCollisionPairs(Collider2D[] a, Collider2D[] b)
+    {
+        if (a == null || b == null) return;
         foreach (Collider2D ca in a)
         {
             if (ca == null || !ca.enabled || ca.isTrigger) continue;
