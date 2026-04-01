@@ -388,6 +388,31 @@ public class RazeSkills : MonoBehaviour
             activeGrenade = null;
     }
 
+    /// <summary>
+    /// 玩家死亡复活：场上炸药包/手雷直接消失（不引爆），技能计数与瞄准状态复位。
+    /// </summary>
+    public void ClearDeployedGearForRespawn()
+    {
+        if (activeSatchel != null)
+        {
+            Destroy(activeSatchel);
+            activeSatchel = null;
+        }
+
+        if (activeGrenade != null)
+        {
+            Destroy(activeGrenade.gameObject);
+            activeGrenade = null;
+        }
+
+        satchelCharges = 2;
+        wasGroundedLastFrame = false;
+        grenadeAimHeld = false;
+        grenadeSuppressUntilKeyRelease = false;
+        grenadeLastDetonateFrame = -1;
+        SetTrajectoryVisible(false);
+    }
+
     void IgnoreCollisionsWithPlayer(GameObject other)
     {
         Collider2D[] pc = GetComponentsInChildren<Collider2D>(true);
