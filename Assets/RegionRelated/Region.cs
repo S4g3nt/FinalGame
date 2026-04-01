@@ -22,6 +22,10 @@ public class Region : MonoBehaviour
         if (other.CompareTag("Hero"))
         {
             RegionManager.Instance.PlayerInRegion(this);
+<<<<<<< Updated upstream
+=======
+            // 记得调回来！！！！！！！！！！！！！！！！！！
+>>>>>>> Stashed changes
         }
     }
     

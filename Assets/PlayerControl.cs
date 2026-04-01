@@ -54,7 +54,6 @@ public class PlayerController : MonoBehaviour
         Sr = GetComponent<SpriteRenderer>();
         
         BoxCollider2D box = GetComponent<BoxCollider2D>();
-        if (box != null) box.size = new Vector2(0.9f, 2f);
 
         if (Sr != null)
         {
