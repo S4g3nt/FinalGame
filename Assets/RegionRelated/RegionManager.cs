@@ -72,7 +72,8 @@ public class RegionManager : MonoBehaviour
     public void PlayerInRegion(Region region)
     {
         if (isTransitioning || region == currentRegion) return;
-        
+        if (playerRigidbody == null)
+            Debug.LogWarning("玩家刚体引用丢失，请重新获取！");
         // 检查玩家是否真的在区域内（中心点）
         GameObject player = GameObject.FindGameObjectWithTag("Hero");
         if (player == null) return;
@@ -88,8 +89,10 @@ public class RegionManager : MonoBehaviour
     // 修正：将返回类型改为非泛型的IEnumerator
     private IEnumerator TransitionToRegion(Region newRegion)
     {
+        Debug.Log("TransitionToRegion 协程启动！");
         isTransitioning = true;
-        
+        if (playerRigidbody == null)
+            Debug.LogWarning("玩家刚体引用丢失，请重新获取！");
         // 1. 保存玩家物理状态
         if (playerRigidbody != null)
         {
