@@ -137,4 +137,22 @@ public class YoruSkills : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// 玩家死亡复活：销毁场上锚点与假人。
+    /// </summary>
+    public void ClearDeployedForRespawn()
+    {
+        if (currentAnchor != null)
+        {
+            Destroy(currentAnchor);
+            currentAnchor = null;
+        }
+
+        if (currentClone != null)
+        {
+            Destroy(currentClone);
+            currentClone = null;
+        }
+    }
 }

@@ -80,20 +80,22 @@ public class PressureButton : MonoBehaviour
         if (visualPressed != null) visualPressed.SetActive(pressed);
     }
 
-    /// <summary>与 SpringPad 一致：本体 Hero、YoruClone 标签，或带 YoruCloneLogic 的假人。</summary>
+    /// <summary>
+    /// 玩家死亡复活时由 <see cref="GameManager"/> 调用：解除 Latch、清空占用、关门与未按下视觉。
+    /// </summary>
+    public void ResetToUnpressedState()
+    {
+        _latched = false;
+        _activeOccupants.Clear();
+        ApplyButtonVisual(false);
+        if (targetDoor != null) targetDoor.SetOpen(false);
+    }
+
+    /// <summary>Hero，或已释放的假人（<see cref="YoruCloneLogic.IsReleasedClone"/>）；静止预制体阶段不触发。</summary>
     public static bool IsActivator(Collider2D col)
     {
         if (col == null) return false;
         if (col.CompareTag("Hero")) return true;
-        if (col.CompareTag("YoruClone"))
-        {
-            // 两阶段假人：预制体阶段不触发按钮；释放后（isMoving=true）才触发
-            var logic = col.GetComponent<YoruCloneLogic>();
-            return logic == null || logic.isMoving;
-        }
-
-        var cloneLogic = col.GetComponent<YoruCloneLogic>();
-        if (cloneLogic != null) return cloneLogic.isMoving;
-        return false;
+        return YoruCloneLogic.IsReleasedClone(col);
     }
 }

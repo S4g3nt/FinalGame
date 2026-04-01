@@ -101,6 +101,8 @@ public class GameManager : MonoBehaviour
         // 3. 执行传送
         player.transform.position = lastCheckpointPos;
 
+        ResetLevelStateAfterPlayerDeath(player);
+
         // 4. --- 核心：在这里恢复一切视觉状态 ---
         PlayerController pc = player.GetComponent<PlayerController>();
         if (pc != null)
@@ -128,5 +130,24 @@ public class GameManager : MonoBehaviour
                 yield return null;
             }
         }
+    }
+
+    /// <summary>
+    /// 复活时重置关卡交互与角色遗留物：压力板、Raze 部署物、Yoru 锚点/假人。
+    /// </summary>
+    static void ResetLevelStateAfterPlayerDeath(GameObject player)
+    {
+        foreach (PressureButton btn in Object.FindObjectsByType<PressureButton>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (btn != null) btn.ResetToUnpressedState();
+        }
+
+        if (player == null) return;
+
+        RazeSkills raze = player.GetComponent<RazeSkills>();
+        if (raze != null) raze.ClearDeployedGearForRespawn();
+
+        YoruSkills yoru = player.GetComponent<YoruSkills>();
+        if (yoru != null) yoru.ClearDeployedForRespawn();
     }
 }

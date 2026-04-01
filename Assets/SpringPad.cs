@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 弹簧踏板：Hero、Yoru 锚点、假人（YoruCloneLogic / YoruClone 标签）踩到后获得向上速度。
+/// 弹簧踏板：Hero、Yoru 锚点、<b>已释放</b>的假人踩到后获得向上速度；静止假人预制体不弹。
 /// 预制体使用实体 BoxCollider2D（非 Trigger），放在地面上即可。
 /// </summary>
 public class SpringPad : MonoBehaviour
@@ -21,7 +21,17 @@ public class SpringPad : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!TryGetTargetRb(collision.collider, out Rigidbody2D rb)) return;
+        TryBounce(collision.collider, collision.rigidbody);
+    }
+
+    /// <summary>
+    /// 外部调用（如假人在弹簧上激活）：与 <see cref="OnCollisionEnter2D"/> 相同判定与冷却。
+    /// </summary>
+    public void TryBounce(Collider2D otherCollider, Rigidbody2D otherRb)
+    {
+        if (otherCollider == null) return;
+        if (!TryGetTargetRb(otherCollider, out Rigidbody2D rb)) return;
+        if (otherRb != null && rb != otherRb) return;
 
         int id = rb.GetInstanceID();
         if (_nextAllowedTime.TryGetValue(id, out float t) && Time.time < t) return;
@@ -39,8 +49,7 @@ public class SpringPad : MonoBehaviour
         if (rb == null) return false;
 
         if (col.CompareTag("Hero")) return true;
-        if (col.CompareTag("YoruClone")) return true;
-        if (col.GetComponent<YoruCloneLogic>() != null) return true;
+        if (YoruCloneLogic.IsReleasedClone(col)) return true;
         if (col.GetComponent<YoruAnchorLogic>() != null) return true;
         return false;
     }
