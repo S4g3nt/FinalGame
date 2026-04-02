@@ -101,7 +101,7 @@ public class JettSkills : MonoBehaviour
         Vector2 directInput = new Vector2(dashH, dashV);
 
         // 使用实时获取的 directInput 来决定冲刺方向
-        Vector2 dashDirVector = directInput == Vector2.zero ? new Vector2(transform.localScale.x, 0f) : directInput.normalized;
+        Vector2 dashDirVector = directInput == Vector2.zero ? new Vector2(-transform.localScale.x, 0f) : directInput.normalized;
 
         if (dashDirVector.x != 0)
         {
