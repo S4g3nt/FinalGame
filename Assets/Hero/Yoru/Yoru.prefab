@@ -82,7 +82,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7614377362554569606, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: m_Name
-      value: Yoru 1
+      value: Yoru
       objectReference: {fileID: 0}
     - target: {fileID: 7823433505352835630, guid: a26feb4ee1e7e7544b14bf0023e663e2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -135,6 +135,10 @@ MonoBehaviour:
   spawnOffset: 1.5
   cloneHeightOffset: 0.2
   anchorHeightOffset: -0.9
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 2147483648
+  wallBufferDistance: 0.3
 --- !u!95 &3998733617620497617
 Animator:
   serializedVersion: 7
