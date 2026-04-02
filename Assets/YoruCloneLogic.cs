@@ -1,12 +1,10 @@
 using UnityEngine;
+using System.Collections;
+using UnityEngine.Rendering; // 引入渲染命名空间，用于 SortingGroup
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class YoruCloneLogic : MonoBehaviour
 {
-    /// <summary>
-    /// 仅当假人已从「静止预制体」被释放（<see cref="isMoving"/>）时视为有效；
-    /// 碰撞体可在子物体上，会向父级查找脚本。
-    /// </summary>
     public static bool IsReleasedClone(Collider2D col)
     {
         if (col == null) return false;
@@ -20,42 +18,49 @@ public class YoruCloneLogic : MonoBehaviour
     public float duration = 5f; 
     private Animator anim;
     
-    [HideInInspector] // 在编辑器里隐藏，由脚本控制
+    [HideInInspector]
     public bool isMoving = false; 
 
     private Rigidbody2D rb;
     private float moveDirection;
+    private SpriteRenderer spriteRenderer;
+    private bool isVanishing = false;
+    public bool IsVanishing => isVanishing;
+    private Coroutine vanishCoroutine;
     bool _pendingSpringContactCheck;
     readonly ContactPoint2D[] _contactScratch = new ContactPoint2D[12];
 
+    [Header("消散动画设置")]
+    public float vanishDuration = 0.5f;
+    [Tooltip("斜切的角度（决定消散切口的倾斜度）")]
+    public float vanishAngle = -30f; 
+
+    // 静态缓存遮罩图片，防止每次生成都占用新内存
+    private static Sprite vanishMaskSprite; 
+
     void Start()
     {
-
         rb = GetComponent<Rigidbody2D>();
-        // 初始方向逻辑不变
-        anim = GetComponent<Animator>(); // 获取动画机组件
-        anim.SetBool("isMoving", false);
+        anim = GetComponent<Animator>(); 
+        if(anim != null) anim.SetBool("isMoving", false);
+        
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer == null)
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         
         moveDirection = -Mathf.Sign(transform.localScale.x);
-        
-        // 注意：这里删掉了 Start 里的 Destroy 代码，因为我们要在激活后才开始倒计时
     }
 
-    // 这是一个公共方法，供 YoruSkills 脚本调用来“激活”假人
     public void ActivateClone()
     {
         if (!isMoving)
         {
             isMoving = true;
-            // 激活时才开始计算寿命倒计时
             if (anim != null) 
             {
-
-                // 方案 B：如果你用的是 Bool (布尔值)
                 anim.SetBool("isMoving", true);
             }
-            Destroy(gameObject, duration);
-            // 已在弹簧上时不会收到 OnCollisionEnter2D，下一物理帧补一次弹跳判定
+            Invoke("StartVanish", duration);
             _pendingSpringContactCheck = true;
         }
     }
@@ -68,14 +73,12 @@ public class YoruCloneLogic : MonoBehaviour
             TryBounceFromTouchingSprings();
         }
 
-        if (isMoving)
+        if (isMoving && !isVanishing) // 增加 !isVanishing 判断，消散时不给速度
         {
-            // 只有在激活状态下才赋予速度
             rb.linearVelocity = new Vector2(moveDirection * moveSpeed, rb.linearVelocity.y);
         }
-        else
+        else if (!isVanishing)
         {
-            // 未激活时保持静止（但保留重力，让它能站在地上）
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
         }
     }
@@ -83,7 +86,7 @@ public class YoruCloneLogic : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision != null && collision.gameObject.CompareTag("DeathZone"))
-            Destroy(gameObject);
+            StartVanish();
     }
 
     void TryBounceFromTouchingSprings()
@@ -102,5 +105,92 @@ public class YoruCloneLogic : MonoBehaviour
             if (spring != null)
                 spring.TryBounce(col, rb);
         }
+    }
+
+    public void StartVanish()
+    {
+        if (isVanishing) return;
+        isVanishing = true;
+        
+        // 1. 禁用碰撞体
+        Collider2D collider = GetComponent<Collider2D>();
+        if (collider != null) collider.enabled = false;
+        
+        // 2. 彻底冻结物理与动作！让它钉在原地
+        if (rb != null) 
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.simulated = false; // 关闭物理模拟，免疫一切重力或推力
+        }
+        if (anim != null) anim.enabled = false; // 定格动画播放
+        
+        if (vanishCoroutine != null) StopCoroutine(vanishCoroutine);
+        vanishCoroutine = StartCoroutine(VanishRoutine());
+    }
+    
+    private IEnumerator VanishRoutine()
+    {
+        // === 核心技术：程序化斜切遮罩 ===
+        
+        // A. 确保遮罩只擦除假人自己，不会把游戏背景或其他角色也擦掉
+        if (gameObject.GetComponent<SortingGroup>() == null)
+        {
+            gameObject.AddComponent<SortingGroup>();
+        }
+
+        // B. 动态创建一个遮罩物体
+        GameObject maskObj = new GameObject("VanishMask");
+        maskObj.transform.SetParent(transform);
+        maskObj.transform.localPosition = Vector3.zero;
+        
+        // 设置斜切角度
+        maskObj.transform.localRotation = Quaternion.Euler(0, 0, vanishAngle);
+        // 把遮罩放大，确保能完全盖住角色
+        maskObj.transform.localScale = new Vector3(15f, 15f, 1f);
+
+        SpriteMask mask = maskObj.AddComponent<SpriteMask>();
+        
+        // C. 在内存中画一张白色的纯色图作为遮罩
+        if (vanishMaskSprite == null)
+        {
+            Texture2D tex = new Texture2D(1, 1);
+            tex.SetPixel(0, 0, Color.white);
+            tex.Apply();
+            vanishMaskSprite = Sprite.Create(tex, new Rect(0, 0, 1, 1), new Vector2(0.5f, 0.5f), 1f);
+        }
+        mask.sprite = vanishMaskSprite;
+
+        // D. 命令假人：只准在遮罩覆盖的区域内显示
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+        }
+
+        // E. 开始执行斜向滑动遮罩的动画
+        float timer = 0f;
+        Vector3 startPos = maskObj.transform.position;
+        // 让遮罩顺着它的“下方”移动（因为已经旋转过了，所以是斜向下的）
+        Vector3 endPos = startPos - maskObj.transform.up * 8f; 
+        
+        Color startColor = spriteRenderer != null ? spriteRenderer.color : Color.white;
+        Color endColor = new Color(startColor.r, startColor.g, startColor.b, 0.2f); // 稍微变透明一点
+
+        while (timer < vanishDuration)
+        {
+            timer += Time.deltaTime;
+            float t = timer / vanishDuration;
+            
+            // 假人完全不动，只移动遮罩，形成切除效果
+            maskObj.transform.position = Vector3.Lerp(startPos, endPos, t);
+            
+            if (spriteRenderer != null)
+                spriteRenderer.color = Color.Lerp(startColor, endColor, t);
+            
+            yield return null;
+        }
+        
+        // 动画结束，销毁一切
+        Destroy(maskObj);
+        Destroy(gameObject);
     }
 }

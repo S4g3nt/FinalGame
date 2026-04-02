@@ -14091,6 +14091,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Yoru
       objectReference: {fileID: 0}
+    - target: {fileID: 4759182909671197222, guid: c7e3625c4aed860459d963e8b44fa9cb, type: 3}
+      propertyPath: obstacleLayer.m_Bits
+      value: 2147483648
+      objectReference: {fileID: 0}
     - target: {fileID: 7998609992247879997, guid: c7e3625c4aed860459d963e8b44fa9cb, type: 3}
       propertyPath: m_LocalPosition.x
       value: -49.74

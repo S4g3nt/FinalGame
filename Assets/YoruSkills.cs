@@ -19,6 +19,12 @@ public class YoruSkills : MonoBehaviour
     [Tooltip("锚点生成的高度偏移（负数，用于贴地）")]
     public float anchorHeightOffset = -0.8f; 
 
+    [Header("防卡墙设置")]
+    [Tooltip("选择代表墙体/地面的 Layer，射线检测到这些层就会阻挡生成")]
+    public LayerMask obstacleLayer;
+    [Tooltip("生成物距离墙面的安全缓冲距离（防止模型边缘依然嵌在墙里）")]
+    public float wallBufferDistance = 0.3f;
+
     // 用来记录当前场上的锚点和假人
     private GameObject currentAnchor;
     private GameObject currentClone;
@@ -29,37 +35,58 @@ public class YoruSkills : MonoBehaviour
         HandleCloneSkill();
     }
 
-    private void HandleAnchorSkill()
+        private void HandleAnchorSkill()
     {
         if (Input.GetKeyDown(anchorKey))
         {
+            // 检查当前锚点是否正在消散
+            bool isVanishing = false;
+            if (currentAnchor != null)
+            {
+                var anchorLogic = currentAnchor.GetComponent<YoruAnchorLogic>();
+                if (anchorLogic != null && anchorLogic.IsVanishing)
+                    isVanishing = true;
+            }
+
             // 如果场上没有锚点（或者锚点已经因为超时等原因被销毁了）
             if (currentAnchor == null)
             {
-                // 放置锚点
-                Vector3 spawnPosition = GetSpawnPositionFront(anchorHeightOffset); 
+                // 放置锚点 (使用防卡墙的安全位置)
+                Vector3 spawnPosition = GetSafeSpawnPosition(anchorHeightOffset); 
                 currentAnchor = Instantiate(anchorPrefab, spawnPosition, Quaternion.identity);
                 SyncDirection(currentAnchor);
                 TryIgnoreAnchorCloneCollisions();
             }
-            else
+            else if (!isVanishing)
             {
-                // 如果场上已经有锚点，执行传送
+                // 如果场上已经有锚点且未消散，执行传送
                 transform.position = currentAnchor.transform.position;
                 // 传送后销毁锚点，这样下次按 L 就可以重新放置了
                 Destroy(currentAnchor);
+                currentAnchor = null;
             }
+            // 如果锚点正在消散，则什么都不做
         }
     }
 
-    private void HandleCloneSkill()
+        private void HandleCloneSkill()
     {
         if (Input.GetKeyDown(cloneKey))
         {
+            // 检查当前假人是否正在消散
+            bool isVanishing = false;
+            if (currentClone != null)
+            {
+                var cloneLogic = currentClone.GetComponent<YoruCloneLogic>();
+                if (cloneLogic != null && cloneLogic.IsVanishing)
+                    isVanishing = true;
+            }
+
             // 情况1：场上没有假人 -> 生成一个静止的假人（预制）
             if (currentClone == null)
             {
-                Vector3 spawnPosition = GetSpawnPositionFront(cloneHeightOffset);
+                // (使用防卡墙的安全位置)
+                Vector3 spawnPosition = GetSafeSpawnPosition(cloneHeightOffset);
                 currentClone = Instantiate(clonePrefab, spawnPosition, Quaternion.identity);
                 SyncDirection(currentClone);
                 
@@ -69,7 +96,7 @@ public class YoruSkills : MonoBehaviour
                 TryIgnoreAnchorCloneCollisions();
             }
             // 情况2：场上已经有一个假人 -> 检查它是否处于静止状态，如果是，则释放它
-            else
+            else if (!isVanishing)
             {
                 YoruCloneLogic logic = currentClone.GetComponent<YoruCloneLogic>();
                 if (logic != null && !logic.isMoving)
@@ -78,15 +105,50 @@ public class YoruSkills : MonoBehaviour
                     logic.ActivateClone();
                 }
             }
+            // 如果假人正在消散，则什么都不做
         }
     }
 
-    // 获取前方位置
-    private Vector3 GetSpawnPositionFront(float heightOffset)
+        // 获取防卡墙的安全生成位置
+    private Vector3 GetSafeSpawnPosition(float heightOffset)
     {
         float facingDirection = -Mathf.Sign(transform.localScale.x);
-        Vector3 offset = new Vector3(facingDirection * spawnOffset, heightOffset, 0);
-        return transform.position + offset;
+        
+        // 射线起点：角色的中心 X，加上对应生成物的高度偏移 Y
+        Vector3 startPos = transform.position + new Vector3(0, heightOffset, 0);
+        Vector2 castDir = new Vector2(facingDirection, 0);
+        
+        // 向前方发射射线，最大检测距离为 spawnOffset
+        RaycastHit2D hit = Physics2D.Raycast(startPos, castDir, spawnOffset, obstacleLayer);
+        
+        Vector3 horizontalPos;
+        if (hit.collider != null)
+        {
+            // 如果碰到了墙壁，实际生成距离 = 射线击中墙壁的距离 - 缓冲距离
+            float safeDistance = hit.distance - wallBufferDistance;
+            
+            // 防止算出的距离为负数（比如玩家自己已经嵌在墙里了，最低在距自己 0 的位置生成）
+            safeDistance = Mathf.Max(0, safeDistance);
+            
+            horizontalPos = startPos + new Vector3(facingDirection * safeDistance, 0, 0);
+        }
+        else
+        {
+            // 前方没有墙壁阻挡，直接按最大距离生成
+            horizontalPos = startPos + new Vector3(facingDirection * spawnOffset, 0, 0);
+        }
+        
+        // 垂直检测：防止生成在地面以下
+        float verticalCheckDistance = 1.0f;
+        // 从水平位置稍微上方开始向下检测，避免从内部开始
+        RaycastHit2D groundHit = Physics2D.Raycast(horizontalPos + Vector3.up * 0.5f, Vector2.down, verticalCheckDistance, obstacleLayer);
+        if (groundHit.collider != null)
+        {
+            // 如果检测到地面，将位置调整到地面之上
+            horizontalPos.y = groundHit.point.y + 0.1f;
+        }
+        
+        return horizontalPos;
     }
 
     // 同步朝向给生成的物体
