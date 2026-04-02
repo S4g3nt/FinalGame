@@ -150,6 +150,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e82a5c1f4b3d2e104a5b6c7d8e9f0a13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CollectibleCounterDisplay
-  levelId: Level_01
+  levelId: Level_03
   label: {fileID: 6835441174417033169}
   format: 'Bomb Collected: {0}/{1}'
