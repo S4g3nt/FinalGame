@@ -133,7 +133,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 复活时重置关卡交互与角色遗留物：压力板、Raze 部署物、Yoru 锚点/假人。
+    /// 复活时重置关卡交互与角色遗留物：压力板、坠刺、Raze 部署物、Yoru 锚点/假人。
     /// </summary>
     static void ResetLevelStateAfterPlayerDeath(GameObject player)
     {
@@ -149,5 +149,7 @@ public class GameManager : MonoBehaviour
 
         YoruSkills yoru = player.GetComponent<YoruSkills>();
         if (yoru != null) yoru.ClearDeployedForRespawn();
+
+        ShatteringStalactite.ResetAllForRespawn();
     }
 }
