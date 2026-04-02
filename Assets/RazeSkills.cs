@@ -227,6 +227,7 @@ public class RazeSkills : MonoBehaviour
         {
             satchelRb.bodyType = RigidbodyType2D.Dynamic;
             satchelRb.gravityScale = rb.gravityScale * satchelGravityScaleMultiplier;
+            satchelRb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
             float vx = rb.linearVelocity.x * satchelInheritVelocityScale;
             float vy = rb.linearVelocity.y * satchelInheritVerticalVelocityScale;
             satchelRb.linearVelocity = new Vector2(vx, vy);
