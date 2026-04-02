@@ -12,8 +12,12 @@ public class DeathTrigger : MonoBehaviour
             // 确保 GameManager 存在
             if (GameManager.Instance != null)
             {
-                // 虚空死亡：马里奥式弹起 + 快速坠落 + 摄像机冻结，再进入渐隐复活
-                GameManager.Instance.StartVoidDeathFall(collision.gameObject);
+                // 停止 Hero 当前的动作，避免在黑屏期间继续移动
+                Rigidbody2D rb = collision.GetComponent<Rigidbody2D>();
+                if (rb != null) rb.linearVelocity = Vector2.zero;
+
+                // 启动 GameManager 里的协程
+                GameManager.Instance.StartRespawn(collision.gameObject);
             }
             else
             {
