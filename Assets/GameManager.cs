@@ -13,6 +13,20 @@ public class GameManager : MonoBehaviour
     public Image fadeImage;
     public float fadeSpeed = 2f;
 
+    [Header("虚空死亡（DeathZone / 马里奥式）")]
+    [Tooltip("触坑后先小跳起阶段时长，之后切换为快速下坠")]
+    public float voidDeathPopDuration = 0.2f;
+    [Tooltip("从触坑到开始黑屏渐隐前的演出总时长")]
+    public float voidDeathVisibleTime = 1.15f;
+    [Tooltip("弹起竖直速度（世界坐标，向上为正）")]
+    public float voidDeathPopUpSpeed = 6.5f;
+    [Tooltip("弹起水平速度随机范围（约 ± 该值）")]
+    public float voidDeathPopHorizontalSpread = 2.4f;
+    [Tooltip("进入下坠阶段时的竖直速度（应为负值）")]
+    public float voidDeathFallDownSpeed = -12f;
+    [Tooltip("下坠阶段重力缩放相对角色原 gravityScale 的倍数")]
+    public float voidDeathFallGravityMultiplier = 3.5f;
+
     // --- 新增：记录当前激活的存档点脚本 ---
     private Checkpoint currentActiveCheckpoint;
 
@@ -73,10 +87,20 @@ public class GameManager : MonoBehaviour
         if (!player.CompareTag(HeroTag)) return;
 
         player.tag = "Untagged";
-        StartCoroutine(RespawnSequence(player));
+        StartCoroutine(RespawnSequenceStandard(player));
     }
 
-    IEnumerator RespawnSequence(GameObject player)
+    /// <summary>掉入虚空 DeathZone：定格动作、摄像机不动、抛起后快速坠落，再进入与普通死亡相同的渐隐复活。</summary>
+    public void StartVoidDeathFall(GameObject player)
+    {
+        if (player == null) return;
+        if (!player.CompareTag(HeroTag)) return;
+
+        player.tag = "Untagged";
+        StartCoroutine(VoidDeathFallRoutine(player));
+    }
+
+    IEnumerator RespawnSequenceStandard(GameObject player)
     {
         if (player == null) yield break;
 
@@ -84,7 +108,63 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         if (player == null) yield break;
 
-        // 2. 屏幕变黑
+        yield return RespawnSequenceCore(player);
+    }
+
+    IEnumerator VoidDeathFallRoutine(GameObject player)
+    {
+        if (player == null) yield break;
+
+        RegionCamera regionCam = Object.FindFirstObjectByType<RegionCamera>();
+        if (regionCam != null)
+            regionCam.SetFollowFrozen(true);
+
+        PlayerController pc = player.GetComponent<PlayerController>();
+        Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
+
+        if (pc != null)
+            pc.BeginVoidDeathFreeze();
+
+        AstraSkills astra = player.GetComponent<AstraSkills>();
+        if (astra != null)
+            astra.ResetToNormalGravity();
+
+        float origGravityScale = rb != null ? rb.gravityScale : 1f;
+        if (rb != null)
+        {
+            float hx = (Random.value * 2f - 1f) * voidDeathPopHorizontalSpread;
+            hx += Random.Range(-0.6f, 0.6f);
+            rb.linearVelocity = new Vector2(hx, voidDeathPopUpSpeed);
+        }
+
+        float elapsed = 0f;
+        bool switchedToFall = false;
+        while (elapsed < voidDeathVisibleTime && player != null)
+        {
+            elapsed += Time.deltaTime;
+            if (!switchedToFall && elapsed >= voidDeathPopDuration && rb != null)
+            {
+                switchedToFall = true;
+                float g = Mathf.Abs(origGravityScale) < 0.01f ? 1f : origGravityScale;
+                rb.gravityScale = g * voidDeathFallGravityMultiplier;
+                float vx = rb.linearVelocity.x * 0.25f;
+                rb.linearVelocity = new Vector2(vx, voidDeathFallDownSpeed);
+            }
+
+            yield return null;
+        }
+
+        if (rb != null)
+            rb.gravityScale = origGravityScale;
+
+        yield return RespawnSequenceCore(player);
+    }
+
+    IEnumerator RespawnSequenceCore(GameObject player)
+    {
+        if (player == null) yield break;
+
+        // 屏幕变黑
         if (fadeImage != null)
         {
             while (fadeImage.color.a < 1f)
@@ -98,18 +178,18 @@ public class GameManager : MonoBehaviour
 
         if (player == null) yield break;
 
-        // 3. 执行传送
+        // 执行传送
         player.transform.position = lastCheckpointPos;
 
         ResetLevelStateAfterPlayerDeath(player);
 
-        // 4. --- 核心：在这里恢复一切视觉状态 ---
         PlayerController pc = player.GetComponent<PlayerController>();
         if (pc != null)
         {
-            pc.SetDeathVisual(false); // 站起来
-            pc.SetHurtColor(false);   // <--- 关键：在此处变回正常颜色
-            pc.EnableControls();      // 恢复操作
+            pc.SetDeathVisual(false);
+            pc.SetHurtColor(false);
+            pc.EnableControls();
+            pc.EndVoidDeathFreeze();
         }
 
         AstraSkills astra = player.GetComponent<AstraSkills>();
@@ -118,7 +198,11 @@ public class GameManager : MonoBehaviour
 
         player.tag = HeroTag;
 
-        // 5. 屏幕变亮
+        RegionCamera regionCam = Object.FindFirstObjectByType<RegionCamera>();
+        if (regionCam != null)
+            regionCam.SetFollowFrozen(false);
+
+        // 屏幕变亮
         yield return new WaitForSeconds(0.3f);
         if (fadeImage != null)
         {

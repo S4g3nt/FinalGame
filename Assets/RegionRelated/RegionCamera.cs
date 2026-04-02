@@ -20,6 +20,8 @@ public class RegionCamera : MonoBehaviour
     private Camera cam;
     private Bounds currentRegionBounds = new Bounds();
     private bool isTransitioning = false;
+    /// <summary>为 true 时 LateUpdate 不再跟随目标（用于虚空死亡等演出）。</summary>
+    private bool followFrozen;
     
     // 竖直方向跟踪状态
     private float currentCameraY = 0f;  // 当前摄像头Y坐标
@@ -74,8 +76,12 @@ public class RegionCamera : MonoBehaviour
         
     }
     
+    /// <summary>暂停/恢复摄像机跟随玩家（位置保持为冻结瞬间的值）。</summary>
+    public void SetFollowFrozen(bool frozen) => followFrozen = frozen;
+
     private void LateUpdate()
     {
+        if (followFrozen) return;
         if (target == null || isTransitioning) return;
         
         // 计算目标摄像头位置

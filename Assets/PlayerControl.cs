@@ -51,6 +51,12 @@ public class PlayerController : MonoBehaviour
     
     private float moveInput;
     private float verticalInput;
+
+    /// <summary>虚空死亡：冻结当前动画帧并暂时关闭碰撞，由 GameManager 协程结束后恢复。</summary>
+    private bool voidDeathActive;
+    public bool IsVoidDeathActive => voidDeathActive;
+    private Collider2D[] voidDeathColliders;
+    private float voidDeathSavedAnimSpeed = 1f;
     /// <summary>由炸药包等写入；FixedUpdate 中与 moveInput*moveSpeed 相加后再写入刚体，避免每帧被行走逻辑覆盖。</summary>
     float horizontalKnockback;
 
@@ -70,6 +76,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (voidDeathActive)
+            return;
+
         // 【核心修复】：将地面检测移到最前面！
         // 无论玩家是否被技能锁死，地面检测必须每帧实时执行，防止状态滞后。
         if (groundCheck == null)
@@ -129,6 +138,9 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (voidDeathActive)
+            return;
+
         if (!ControlsEnabled || IsSkillLocked) return;
 
         float walkX = moveInput * moveSpeed;
@@ -189,6 +201,54 @@ public class PlayerController : MonoBehaviour
     public void SetHurtColor(bool isHurt)
     {
         if (Sr != null) Sr.color = isHurt ? Color.red : defaultColor;
+    }
+
+    /// <summary>触碰到虚空 DeathZone：定格当前动作、关掉碰撞，便于无视地形被抛起再坠落。</summary>
+    public void BeginVoidDeathFreeze()
+    {
+        voidDeathActive = true;
+        ControlsEnabled = false;
+        moveInput = 0f;
+        horizontalKnockback = 0f;
+        if (Rb != null)
+            Rb.linearVelocity = Vector2.zero;
+
+        if (Anim != null)
+        {
+            voidDeathSavedAnimSpeed = Anim.speed;
+            Anim.speed = 0f;
+        }
+
+        voidDeathColliders = GetComponentsInChildren<Collider2D>(true);
+        if (voidDeathColliders != null)
+        {
+            foreach (Collider2D c in voidDeathColliders)
+            {
+                if (c != null)
+                    c.enabled = false;
+            }
+        }
+    }
+
+    /// <summary>复活流程末尾调用；若未进行过虚空死亡则立即返回。</summary>
+    public void EndVoidDeathFreeze()
+    {
+        if (!voidDeathActive)
+            return;
+
+        voidDeathActive = false;
+        if (Anim != null)
+            Anim.speed = voidDeathSavedAnimSpeed > 0f ? voidDeathSavedAnimSpeed : 1f;
+
+        if (voidDeathColliders != null)
+        {
+            foreach (Collider2D c in voidDeathColliders)
+            {
+                if (c != null)
+                    c.enabled = true;
+            }
+            voidDeathColliders = null;
+        }
     }
 
     void OnDrawGizmosSelected()
