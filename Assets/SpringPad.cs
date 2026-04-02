@@ -22,7 +22,19 @@ public class SpringPad : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // 验证目标合法性
         if (!TryGetTargetRb(collision.collider, out Rigidbody2D rb)) return;
+
+        // 调用公开的弹跳逻辑
+        TryBounce(collision.collider, rb);
+    }
+
+    /// <summary>
+    /// 公开的弹跳方法，供外部脚本（如 YoruCloneLogic）在静止激活时强制调用
+    /// </summary>
+    public void TryBounce(Collider2D col, Rigidbody2D rb)
+    {
+        if (rb == null) return;
 
         int id = rb.GetInstanceID();
         if (_nextAllowedTime.TryGetValue(id, out float t) && Time.time < t) return;
