@@ -255,7 +255,7 @@ MonoBehaviour:
   satchelInheritVelocityScale: 0.8
   satchelInheritVerticalVelocityScale: 1
   satchelGravityScaleMultiplier: 1.35
-  satchelBlastRadius: 3
+  satchelBlastRadius: 2
   satchelBlastForce: 30
   satchelForceFalloff:
     serializedVersion: 2
@@ -282,7 +282,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   satchelKnockbackEdgeFloor: 0.38
-  satchelNearCenterKnockbackScale: 0.42
+  satchelNearCenterKnockbackScale: 0.45
   satchelNearCenterBlendToFullByNorm: 0.5
   satchelKnockbackSpeedGain: 0.55
   satchelKnockbackSpeedReference: 6
