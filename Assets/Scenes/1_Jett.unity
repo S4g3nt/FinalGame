@@ -3625,6 +3625,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4468332086379084205, guid: 9beba0ed05c3d2a4b8756b8b94c359b5, type: 3}
+      propertyPath: levelId
+      value: Level_01
+      objectReference: {fileID: 0}
     - target: {fileID: 7422202707677630916, guid: 9beba0ed05c3d2a4b8756b8b94c359b5, type: 3}
       propertyPath: m_Name
       value: countdisp
