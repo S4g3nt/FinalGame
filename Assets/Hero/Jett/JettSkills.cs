@@ -73,6 +73,9 @@ public class JetSkills : MonoBehaviour
     
     void FixedUpdate()
     {
+        if (playerController != null && playerController.IsVoidDeathActive)
+            return;
+
         // 如果正在冲刺，跳过缓降效果
         if (!isDashing)
         {

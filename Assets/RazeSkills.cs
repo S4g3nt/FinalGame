@@ -148,6 +148,7 @@ public class RazeSkills : MonoBehaviour
 
     void ClampRazeMaxLinearSpeed()
     {
+        if (player != null && player.IsVoidDeathActive) return;
         if (rb == null || razeMaxLinearSpeed <= 0f) return;
         Vector2 v = rb.linearVelocity;
         float m = v.magnitude;
