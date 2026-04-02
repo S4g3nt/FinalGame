@@ -13,6 +13,7 @@ public enum PressureButtonMode
 /// 与 <see cref="PairedDoor"/> 配对：Hero 或 Yoru 假人进入触发区时驱动按钮与门。
 /// 按钮物体上需带 <b>Is Trigger</b> 的 Collider2D（建议略大于踏板便于踩）。
 /// </summary>
+[RequireComponent(typeof(AudioSource))] // 自动添加 AudioSource 组件
 public class PressureButton : MonoBehaviour
 {
     [SerializeField] PairedDoor targetDoor;
@@ -22,9 +23,21 @@ public class PressureButton : MonoBehaviour
     [SerializeField] GameObject visualUnpressed;
     [SerializeField] GameObject visualPressed;
 
+    [Header("音效设置")]
+    [SerializeField] AudioClip pressSound;   // 按下时的音效
+    [SerializeField] AudioClip releaseSound; // 弹起时的音效 (仅 Hold 模式有效)
+
+    private AudioSource audioSource;
     bool _latched;
     /// <summary>当前在触发区内且满足 IsActivator 的碰撞体（用于 Hold，及假人从“预制体→释放”后仍在按钮上的情况）。</summary>
     readonly HashSet<Collider2D> _activeOccupants = new HashSet<Collider2D>();
+
+    void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 0f; // 设为 2D 音效
+    }
 
     void Start()
     {
@@ -48,6 +61,7 @@ public class PressureButton : MonoBehaviour
         if (_activeOccupants.Count == 0)
         {
             ApplyButtonVisual(false);
+            PlaySound(releaseSound); // 播放弹起音效
             if (targetDoor != null) targetDoor.SetOpen(false);
         }
     }
@@ -63,6 +77,7 @@ public class PressureButton : MonoBehaviour
             if (_latched) return;
             _latched = true;
             ApplyButtonVisual(true);
+            PlaySound(pressSound); // 播放按下音效
             if (targetDoor != null) targetDoor.SetOpen(true);
             return;
         }
@@ -70,6 +85,7 @@ public class PressureButton : MonoBehaviour
         if (_activeOccupants.Count == 1)
         {
             ApplyButtonVisual(true);
+            PlaySound(pressSound); // 播放按下音效
             if (targetDoor != null) targetDoor.SetOpen(true);
         }
     }
@@ -80,6 +96,14 @@ public class PressureButton : MonoBehaviour
         if (visualPressed != null) visualPressed.SetActive(pressed);
     }
 
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
+    }
+
     /// <summary>
     /// 玩家死亡复活时由 <see cref="GameManager"/> 调用：解除 Latch、清空占用、关门与未按下视觉。
     /// </summary>
@@ -88,6 +112,7 @@ public class PressureButton : MonoBehaviour
         _latched = false;
         _activeOccupants.Clear();
         ApplyButtonVisual(false);
+        // 这里故意不调用 PlaySound(releaseSound)，防止玩家死亡瞬间全图机关重置发出巨大的噪音
         if (targetDoor != null) targetDoor.SetOpen(false);
     }
 

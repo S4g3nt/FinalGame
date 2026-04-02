@@ -5,6 +5,7 @@ using UnityEngine.Events;
 /// <summary>
 /// 2D 收集物：碰 Hero 触发器拾取，已拾取的存档后不再出现。
 /// 未被拾取时会进行 Sin 模式的上下浮动视觉效果。
+/// 拾取时会生成临时物体播放 2D 音效，防止因自身销毁导致声音中断。
 /// 请为每个实例设置 levelId（本关统一）与 collectibleId（本关唯一）。
 /// </summary>
 [DefaultExecutionOrder(-200)]
@@ -20,6 +21,12 @@ public class Collectible2D : MonoBehaviour
     [SerializeField] bool destroyOnPickup = true;
 
     [SerializeField] UnityEvent onCollected;
+
+    // ================= NEW AUDIO SETTINGS =================
+    [Header("Audio Settings (音效设置)")]
+    [Tooltip("拾取时播放的音效")]
+    [SerializeField] private AudioClip pickupSound;
+    // =======================================================
 
     // ================= NEW VISUAL SETTINGS =================
     [Header("Visual Effects (Sin 浮动视觉特效)")]
@@ -54,7 +61,6 @@ public class Collectible2D : MonoBehaviour
         }
     }
 
-    // ================= NEW UPDATE LOGIC =================
     void Update()
     {
         // 处理上下移动 (Sin 模式)
@@ -66,7 +72,6 @@ public class Collectible2D : MonoBehaviour
         // 应用新的位置，保持 X 和 Z轴不变，只在初始 Y轴偏移量
         transform.position = new Vector3(startPosition.x, startPosition.y + newY, startPosition.z);
     }
-    // =======================================================
 
     void RefreshTotalsForSceneIfNeeded()
     {
@@ -93,6 +98,24 @@ public class Collectible2D : MonoBehaviour
     {
         if (collision == null || !collision.CompareTag("Hero")) return;
         if (CollectibleProgress.IsCollected(levelId, collectibleId)) return;
+
+        // --- 播放收集音效逻辑 ---
+        if (pickupSound != null)
+        {
+            // 动态创建一个名为 PickupSound 的空物体
+            GameObject audioObj = new GameObject("PickupSound_" + collectibleId);
+            audioObj.transform.position = transform.position;
+            
+            // 给空物体挂载 AudioSource 组件
+            AudioSource src = audioObj.AddComponent<AudioSource>();
+            src.clip = pickupSound;
+            src.spatialBlend = 0f; // 强制设置为 0 (纯 2D 声音)，无论相机多远都能清晰听到
+            src.Play();
+            
+            // 设定在音效时长结束后，自动销毁这个临时物体
+            Destroy(audioObj, pickupSound.length);
+        }
+        // ------------------------
 
         CollectibleProgress.MarkCollected(levelId, collectibleId);
         onCollected?.Invoke();

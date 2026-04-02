@@ -147,5 +147,6 @@ MonoBehaviour:
   onCollected:
     m_PersistentCalls:
       m_Calls: []
+  pickupSound: {fileID: 8300000, guid: 11a8c4bf909651f46980fe051f53d6dd, type: 3}
   floatAmplitude: 0.2
   floatSpeed: 3
