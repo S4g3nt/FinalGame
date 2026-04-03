@@ -9,9 +9,18 @@ EditorBuildSettings:
     path: Assets/Scenes/0_Menu.unity
     guid: 0320228cf438b1f4bab433ecd8c562a4
   - enabled: 1
+    path: Assets/Scenes/2_Yoru.unity
+    guid: d8dbf796db3c4784cad7573f8a8cf6b2
+  - enabled: 1
+    path: Assets/Scenes/3_Raze.unity
+    guid: f7ef0ac35776c384fa32f40ede510206
+  - enabled: 1
+    path: Assets/Scenes/4_Astra.unity
+    guid: bd83804276ab9d342987e5e368be10c2
+  - enabled: 0
     path: Assets/Scenes/1_Jett.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/yorutest.unity
     guid: 99cadaa5c0a150b4890cd0cc7982ef2f
   - enabled: 1

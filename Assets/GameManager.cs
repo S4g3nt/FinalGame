@@ -56,7 +56,17 @@ public class GameManager : MonoBehaviour
             Color c = fadeImage.color;
             c.a = 0f;
             fadeImage.color = c;
+            SyncFadeRaycastTarget();
         }
+    }
+
+    /// <summary>
+    /// 按当前透明度同步 Fade 是否拦截射线：全透明时不挡 UI 点击（胜利界面、菜单等会调用）。
+    /// </summary>
+    public void SyncFadeRaycastTarget()
+    {
+        if (fadeImage == null) return;
+        fadeImage.raycastTarget = fadeImage.color.a > 0.01f;
     }
 
     // --- 新增：核心逻辑，确保只有一个绿 ---
@@ -174,6 +184,7 @@ public class GameManager : MonoBehaviour
                 fadeImage.color = c;
                 yield return null;
             }
+            SyncFadeRaycastTarget();
         }
 
         if (player == null) yield break;
@@ -213,6 +224,7 @@ public class GameManager : MonoBehaviour
                 fadeImage.color = c;
                 yield return null;
             }
+            SyncFadeRaycastTarget();
         }
     }
 
