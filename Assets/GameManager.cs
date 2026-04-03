@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
 
     [Header("场景跳转")]
     [Tooltip("选关界面场景的名称，按 ESC 时会加载这个场景")]
-    public string levelSelectSceneName = "LevelSelect";
+    public string levelSelectSceneName = "0_Menu";
 
     [Header("复活设置")]
     public Vector3 lastCheckpointPos;
@@ -63,6 +63,9 @@ public class GameManager : MonoBehaviour
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         currentActiveCheckpoint = null;
+        // DontDestroyOnLoad 后，上一关的 FadeImage 已销毁，Inspector 引用会变成“空”，需按场景重新绑定
+        TryBindFadeImageForCurrentScene();
+
         GameObject player = GameObject.FindGameObjectWithTag(HeroTag);
         if (player != null)
         {
@@ -130,7 +133,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// - 键：已踩过存档点时传送到场景中离玩家最近的 Checkpoint；否则传送到本关初始出生点。无渐隐，并重置部分关卡状态。
+    /// - 键：已激活存档点时传送到当前激活存档点（与 lastCheckpointPos 一致）；否则传送到本关初始出生点。无渐隐，并重置部分关卡状态。
     /// </summary>
     public void TryCheatRespawnNearestOrDefault()
     {
@@ -138,34 +141,7 @@ public class GameManager : MonoBehaviour
         if (player == null) return;
 
         bool hasActivatedCheckpoint = currentActiveCheckpoint != null;
-
-        Vector3 target;
-        if (!hasActivatedCheckpoint)
-        {
-            target = levelDefaultSpawnPos;
-        }
-        else
-        {
-            Checkpoint[] all = Object.FindObjectsByType<Checkpoint>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-            if (all == null || all.Length == 0)
-                target = levelDefaultSpawnPos;
-            else
-            {
-                Vector3 p = player.transform.position;
-                Checkpoint best = all[0];
-                float bestSq = (best.transform.position - p).sqrMagnitude;
-                for (int i = 1; i < all.Length; i++)
-                {
-                    float sq = (all[i].transform.position - p).sqrMagnitude;
-                    if (sq < bestSq)
-                    {
-                        bestSq = sq;
-                        best = all[i];
-                    }
-                }
-                target = best.transform.position;
-            }
-        }
+        Vector3 target = hasActivatedCheckpoint ? lastCheckpointPos : levelDefaultSpawnPos;
 
         player.transform.position = target;
         Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
@@ -202,6 +178,21 @@ public class GameManager : MonoBehaviour
             Vector3 p = player.transform.position;
             lastCheckpointPos = p;
             levelDefaultSpawnPos = p;
+        }
+
+        TryBindFadeImageForCurrentScene();
+    }
+
+    /// <summary>
+    /// 切换关卡后重新绑定名为 FadeImage 的全屏 Image（与场景内物体一致）。
+    /// </summary>
+    void TryBindFadeImageForCurrentScene()
+    {
+        if (fadeImage == null)
+        {
+            GameObject go = GameObject.Find("FadeImage");
+            if (go != null)
+                fadeImage = go.GetComponent<Image>();
         }
 
         if (fadeImage != null)
@@ -326,6 +317,9 @@ public class GameManager : MonoBehaviour
     IEnumerator RespawnSequenceCore(GameObject player)
     {
         if (player == null) yield break;
+
+        if (fadeImage == null)
+            TryBindFadeImageForCurrentScene();
 
         // 屏幕变黑
         if (fadeImage != null)
