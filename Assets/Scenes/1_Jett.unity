@@ -30875,6 +30875,26 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
+  - first: {x: 143, y: 23, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 39
+      m_TileSpriteIndex: 39
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+  - first: {x: 144, y: 23, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 39
+      m_TileSpriteIndex: 39
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
   - first: {x: 154, y: 23, z: 0}
     second:
       serializedVersion: 2
@@ -35525,7 +35545,7 @@ Tilemap:
     m_RefCount: 0
     m_Data: {fileID: 11400000, guid: beacfa28f68bd8a45b17d1f965eaf80a, type: 2}
   - serializedVersion: 2
-    m_RefCount: 16
+    m_RefCount: 18
     m_Data: {fileID: 11400000, guid: 3a6f5f096c0eff849a3908dd1072c195, type: 2}
   - serializedVersion: 2
     m_RefCount: 8
@@ -35682,7 +35702,7 @@ Tilemap:
     m_RefCount: 0
     m_Data: {fileID: 1671348915, guid: 9c672a8a4330a8f4891a4a29bf9d21a1, type: 3}
   - serializedVersion: 2
-    m_RefCount: 16
+    m_RefCount: 18
     m_Data: {fileID: -418082092, guid: 9c672a8a4330a8f4891a4a29bf9d21a1, type: 3}
   - serializedVersion: 2
     m_RefCount: 8
@@ -35722,7 +35742,7 @@ Tilemap:
     m_Data: {fileID: -234096676, guid: 9c672a8a4330a8f4891a4a29bf9d21a1, type: 3}
   m_TileMatrixArray:
   - serializedVersion: 2
-    m_RefCount: 3086
+    m_RefCount: 3088
     m_Data:
       e00: 1
       e01: 0
@@ -35742,7 +35762,7 @@ Tilemap:
       e33: 1
   m_TileColorArray:
   - serializedVersion: 2
-    m_RefCount: 3086
+    m_RefCount: 3088
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
@@ -35911,13 +35931,13 @@ CompositeCollider2D:
         Y: 330000000
       - X: 1340000000
         Y: 330000000
-    - - X: 1430000000
+    - - X: 1450000000
         Y: 240000000
       - X: 1270000000
         Y: 240000000
       - X: 1270000000
         Y: 230000000
-      - X: 1430000000
+      - X: 1450000000
         Y: 230000000
     - - X: -20000000
         Y: 220000000
@@ -35995,14 +36015,6 @@ CompositeCollider2D:
         Y: 110000000
       - X: -550000000
         Y: 110000000
-    - - X: 1230000000
-        Y: 180000000
-      - X: 1020000000
-        Y: 180000000
-      - X: 1020000000
-        Y: -40000000
-      - X: 1230000000
-        Y: -40000000
     - - X: 980000000
         Y: 180000000
       - X: 900000000
@@ -36011,6 +36023,14 @@ CompositeCollider2D:
         Y: 160000000
       - X: 980000000
         Y: 160000000
+    - - X: 1230000000
+        Y: 180000000
+      - X: 1020000000
+        Y: 180000000
+      - X: 1020000000
+        Y: -40000000
+      - X: 1230000000
+        Y: -40000000
     - - X: -690000000
         Y: 120000000
       - X: -690000000
@@ -36123,14 +36143,6 @@ CompositeCollider2D:
         Y: 40000000
       - X: -790000000
         Y: 40000000
-    - - X: -650000000
-        Y: 80000000
-      - X: -760000000
-        Y: 80000000
-      - X: -760000000
-        Y: -30000000
-      - X: -650000000
-        Y: -30000000
     - - X: 470000000
         Y: 80000000
       - X: 310000000
@@ -36139,6 +36151,14 @@ CompositeCollider2D:
         Y: -40000000
       - X: 470000000
         Y: -40000000
+    - - X: -650000000
+        Y: 80000000
+      - X: -760000000
+        Y: 80000000
+      - X: -760000000
+        Y: -30000000
+      - X: -650000000
+        Y: -30000000
     - - X: 790000000
         Y: 60000000
       - X: 620000000
@@ -36193,8 +36213,8 @@ CompositeCollider2D:
       - {x: 133.99997, y: 34}
       - {x: 127, y: 33.999973}
       - {x: 127.00003, y: 33}
-    - - {x: 142.99997, y: 23}
-      - {x: 142.99997, y: 24}
+    - - {x: 144.99997, y: 23}
+      - {x: 144.99997, y: 24}
       - {x: 127, y: 23.999971}
       - {x: 127.00003, y: 23}
     - - {x: -2.0000293, y: 9}
