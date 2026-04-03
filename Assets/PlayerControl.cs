@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
@@ -60,6 +61,17 @@ public class PlayerController : MonoBehaviour
     /// <summary>由炸药包等写入；FixedUpdate 中与 moveInput*moveSpeed 相加后再写入刚体，避免每帧被行走逻辑覆盖。</summary>
     float horizontalKnockback;
 
+    [Header("调试：幽灵模式（P 开关）")]
+    [Tooltip("Kinematic + 关固体碰撞，六向飘移；再按 P 关闭")]
+    [SerializeField] float ghostMoveSpeed = 32f;
+
+    bool ghostModeActive;
+    RigidbodyType2D ghostSavedBodyType;
+    float ghostSavedGravityScale;
+    readonly List<(Collider2D col, bool wasEnabled)> ghostColliderStates = new List<(Collider2D, bool)>();
+
+    public bool GhostModeActive => ghostModeActive;
+
     void Start()
     {
         Rb = GetComponent<Rigidbody2D>();
@@ -78,6 +90,23 @@ public class PlayerController : MonoBehaviour
     {
         if (voidDeathActive)
             return;
+
+        if (Input.GetKeyDown(KeyCode.P))
+            ToggleGhostMode();
+
+        if (ghostModeActive)
+        {
+            moveInput = Input.GetAxisRaw("Horizontal");
+            verticalInput = Input.GetAxisRaw("Vertical");
+            RawInput = new Vector2(moveInput, verticalInput);
+            UpdateCommonPhysicsAndAnimation(moveInput);
+            if (Anim != null)
+            {
+                Anim.SetBool("IsGrounded", false);
+                Anim.SetFloat("Speed", RawInput.sqrMagnitude > 0.01f ? 1f : 0f);
+            }
+            return;
+        }
 
         // 【核心修复】：将地面检测移到最前面！
         // 无论玩家是否被技能锁死，地面检测必须每帧实时执行，防止状态滞后。
@@ -140,6 +169,16 @@ public class PlayerController : MonoBehaviour
     {
         if (voidDeathActive)
             return;
+
+        if (ghostModeActive)
+        {
+            if (Rb == null) return;
+            Vector2 dir = new Vector2(moveInput, verticalInput);
+            if (dir.sqrMagnitude > 1f)
+                dir.Normalize();
+            Rb.MovePosition(Rb.position + dir * ghostMoveSpeed * Time.fixedDeltaTime);
+            return;
+        }
 
         if (!ControlsEnabled || IsSkillLocked) return;
 
@@ -249,6 +288,63 @@ public class PlayerController : MonoBehaviour
             }
             voidDeathColliders = null;
         }
+    }
+
+    void ToggleGhostMode()
+    {
+        if (Rb == null)
+            Rb = GetComponent<Rigidbody2D>();
+        if (Rb == null) return;
+
+        ghostModeActive = !ghostModeActive;
+
+        if (ghostModeActive)
+        {
+            ghostSavedBodyType = Rb.bodyType;
+            ghostSavedGravityScale = Rb.gravityScale;
+            Rb.bodyType = RigidbodyType2D.Kinematic;
+            Rb.gravityScale = 0f;
+            Rb.linearVelocity = Vector2.zero;
+            horizontalKnockback = 0f;
+
+            ghostColliderStates.Clear();
+            foreach (Collider2D c in GetComponentsInChildren<Collider2D>(true))
+            {
+                if (c == null || c.isTrigger) continue;
+                ghostColliderStates.Add((c, c.enabled));
+                c.enabled = false;
+            }
+        }
+        else
+        {
+            Rb.bodyType = ghostSavedBodyType;
+            Rb.gravityScale = ghostSavedGravityScale;
+            Rb.linearVelocity = Vector2.zero;
+
+            foreach (var pair in ghostColliderStates)
+            {
+                if (pair.col != null)
+                    pair.col.enabled = pair.wasEnabled;
+            }
+            ghostColliderStates.Clear();
+        }
+    }
+
+    /// <summary>外部强制关闭幽灵模式（例如快捷复活后恢复碰撞）。</summary>
+    public void ForceExitGhostMode()
+    {
+        if (!ghostModeActive) return;
+        ghostModeActive = false;
+        if (Rb == null) return;
+        Rb.bodyType = ghostSavedBodyType;
+        Rb.gravityScale = ghostSavedGravityScale;
+        Rb.linearVelocity = Vector2.zero;
+        foreach (var pair in ghostColliderStates)
+        {
+            if (pair.col != null)
+                pair.col.enabled = pair.wasEnabled;
+        }
+        ghostColliderStates.Clear();
     }
 
     void OnDrawGizmosSelected()

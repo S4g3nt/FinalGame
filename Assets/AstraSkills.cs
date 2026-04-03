@@ -127,6 +127,10 @@ public class AstraSkills : MonoBehaviour
     [Range(0.88f, 1f)]
     public float invertedGravityStrength = 0.93f;
 
+    [Header("音效")]
+    public AudioClip gravityToggleSfx;
+    [Range(0f, 2f)] public float gravityToggleSfxVolume = 1f;
+
     [Header("次数限制")]
     [SerializeField] private bool hasFlipCharge = true; // 是否拥有翻转电量
     private float lastFlipTime; // 记录上次翻转的时间
@@ -138,6 +142,7 @@ public class AstraSkills : MonoBehaviour
     private SpriteRenderer sr;
     private bool gravityInverted;
     private float baselineGravityScale;
+    AudioSource _sfx;
 
     void Awake()
     {
@@ -157,6 +162,11 @@ public class AstraSkills : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         if (sr == null && player != null)
             sr = player.Sr;
+
+        _sfx = GetComponent<AudioSource>();
+        if (_sfx == null) _sfx = gameObject.AddComponent<AudioSource>();
+        _sfx.playOnAwake = false;
+        _sfx.spatialBlend = 0f;
     }
 
     void Update()
@@ -212,6 +222,9 @@ public class AstraSkills : MonoBehaviour
 
         if (flipSpriteWhenInverted && sr != null)
             sr.flipY = gravityInverted;
+
+        if (gravityToggleSfx != null && _sfx != null)
+            _sfx.PlayOneShot(gravityToggleSfx, gravityToggleSfxVolume);
     }
 
     /// <summary>复活重置逻辑</summary>

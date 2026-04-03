@@ -135,6 +135,10 @@ MonoBehaviour:
   spawnOffset: 1.5
   cloneHeightOffset: 0.2
   anchorHeightOffset: -0.9
+  cloneReleaseSfx: {fileID: 8300000, guid: 86d9dd41c33b6b346936baa9e9feda21, type: 3}
+  cloneReleaseSfxVolume: 1
+  anchorTeleportSfx: {fileID: 8300000, guid: c54865b588f70974babb1547f99849b5, type: 3}
+  anchorTeleportSfxVolume: 1
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 2147483648

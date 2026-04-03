@@ -116,7 +116,10 @@ public class RazeGrenade : MonoBehaviour
         CancelInvoke(nameof(TimedDetonate));
 
         if (owner != null)
+        {
+            owner.PlayGrenadeExplosionSound();
             owner.SpawnGrenadeDestroyRadiusRing(transform.position, destroyRadius);
+        }
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, destroyRadius);
         foreach (Collider2D c in hits)

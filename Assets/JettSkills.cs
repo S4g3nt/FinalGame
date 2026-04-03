@@ -21,9 +21,15 @@ public class JettSkills : MonoBehaviour
     public GameObject ghostPrefab; 
     public float ghostSpawnInterval = 0.03f; 
 
+    [Header("音效")]
+    public AudioClip dashSfx;
+    [Range(0f, 2f)] public float dashSfxVolume = 1f;
+
     private bool isHovering; 
     private bool isDashing; 
     private bool canDash = true; 
+
+    AudioSource _sfx;
 
     void Start()
     {
@@ -31,6 +37,11 @@ public class JettSkills : MonoBehaviour
 
         if (airFlowParticles == null) airFlowParticles = GetComponentInChildren<ParticleSystem>();
         if (airFlowParticles != null) airFlowParticles.Stop();
+
+        _sfx = GetComponent<AudioSource>();
+        if (_sfx == null) _sfx = gameObject.AddComponent<AudioSource>();
+        _sfx.playOnAwake = false;
+        _sfx.spatialBlend = 0f;
     }
 
     void Update()
@@ -85,6 +96,9 @@ public class JettSkills : MonoBehaviour
     {
         canDash = false; 
         isDashing = true; 
+
+        if (dashSfx != null && _sfx != null)
+            _sfx.PlayOneShot(dashSfx, dashSfxVolume);
         
         // 告诉基础控制器锁定常规行动
         player.IsSkillLocked = true; 

@@ -258,6 +258,9 @@ MonoBehaviour:
   gravityToggleKey: 113
   flipSpriteWhenInverted: 1
   invertedGravityStrength: 0.93
+  gravityToggleSfx: {fileID: 8300000, guid: d9086471d21ffac448d5d9720b4d29d6, type: 3}
+  gravityToggleSfxVolume: 1
+  hasFlipCharge: 1
 --- !u!95 &6407711210482571160
 Animator:
   serializedVersion: 7
