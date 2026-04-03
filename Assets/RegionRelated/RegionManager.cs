@@ -77,6 +77,9 @@ public class RegionManager : MonoBehaviour
         // 检查玩家是否真的在区域内（中心点）
         GameObject player = GameObject.FindGameObjectWithTag("Hero");
         if (player == null) return;
+
+        PlayerController pc = player.GetComponent<PlayerController>();
+        if (pc != null && pc.GhostModeActive) return;
         
         Vector3 playerCenter = player.transform.position;
         

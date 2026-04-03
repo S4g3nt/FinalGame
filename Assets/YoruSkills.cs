@@ -19,6 +19,12 @@ public class YoruSkills : MonoBehaviour
     [Tooltip("锚点生成的高度偏移（负数，用于贴地）")]
     public float anchorHeightOffset = -0.8f; 
 
+    [Header("音效")]
+    public AudioClip cloneReleaseSfx;
+    [Range(0f, 2f)] public float cloneReleaseSfxVolume = 1f;
+    public AudioClip anchorTeleportSfx;
+    [Range(0f, 2f)] public float anchorTeleportSfxVolume = 1f;
+
     [Header("防卡墙设置")]
     [Tooltip("选择代表墙体/地面的 Layer，射线检测到这些层就会阻挡生成")]
     public LayerMask obstacleLayer;
@@ -28,6 +34,16 @@ public class YoruSkills : MonoBehaviour
     // 用来记录当前场上的锚点和假人
     private GameObject currentAnchor;
     private GameObject currentClone;
+
+    AudioSource _sfx;
+
+    void Awake()
+    {
+        _sfx = GetComponent<AudioSource>();
+        if (_sfx == null) _sfx = gameObject.AddComponent<AudioSource>();
+        _sfx.playOnAwake = false;
+        _sfx.spatialBlend = 0f;
+    }
 
     void Update()
     {
@@ -60,6 +76,8 @@ public class YoruSkills : MonoBehaviour
             else if (!isVanishing)
             {
                 // 如果场上已经有锚点且未消散，执行传送
+                if (anchorTeleportSfx != null && _sfx != null)
+                    _sfx.PlayOneShot(anchorTeleportSfx, anchorTeleportSfxVolume);
                 transform.position = currentAnchor.transform.position;
                 // 传送后销毁锚点，这样下次按 L 就可以重新放置了
                 Destroy(currentAnchor);
@@ -103,6 +121,8 @@ public class YoruSkills : MonoBehaviour
                 {
                     // 再次按下 J，释放假人
                     logic.ActivateClone();
+                    if (cloneReleaseSfx != null && _sfx != null)
+                        _sfx.PlayOneShot(cloneReleaseSfx, cloneReleaseSfxVolume);
                 }
             }
             // 如果假人正在消散，则什么都不做

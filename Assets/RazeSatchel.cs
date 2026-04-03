@@ -15,6 +15,7 @@ public class RazeSatchel : MonoBehaviour
     {
         if (owner == null) return;
 
+        owner.PlaySatchelExplosionSound();
         owner.SpawnSatchelBlastRadiusRing(transform.position, blastRadius);
 
         Rigidbody2D playerRb = owner.PlayerRb;

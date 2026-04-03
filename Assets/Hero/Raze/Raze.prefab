@@ -147,6 +147,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2147483648
   controlsEnabled: 1
+  ghostMoveSpeed: 32
 --- !u!61 &6140522582611070702
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -213,6 +214,8 @@ MonoBehaviour:
   dashDuration: 0.1
   ghostPrefab: {fileID: 8787149846499474545, guid: d8b7875d69914e242ae0ff4148f04947, type: 3}
   ghostSpawnInterval: 0.03
+  dashSfx: {fileID: 0}
+  dashSfxVolume: 1
 --- !u!95 &1269378448527293274
 Animator:
   serializedVersion: 7
@@ -305,6 +308,10 @@ MonoBehaviour:
   trajectorySteps: 32
   trajectoryTimeStep: 0.05
   grenadeDestroyRadius: 2
+  satchelExplosionSfx: {fileID: 8300000, guid: 7a9cea0e8e4ee714986f3810f747a113, type: 3}
+  satchelExplosionSfxVolume: 1
+  grenadeExplosionSfx: {fileID: 8300000, guid: 36980b7b08f57dd41a50a0abf09729e9, type: 3}
+  grenadeExplosionSfxVolume: 1
   grenadeShowDestroyRadiusRing: 1
   grenadeBlastRingDuration: 0.55
   grenadeBlastRingSegments: 48

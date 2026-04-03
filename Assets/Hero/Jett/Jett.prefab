@@ -243,6 +243,8 @@ MonoBehaviour:
   dashDuration: 0.1
   ghostPrefab: {fileID: 8787149846499474545, guid: d8b7875d69914e242ae0ff4148f04947, type: 3}
   ghostSpawnInterval: 0.03
+  dashSfx: {fileID: 8300000, guid: 0b739517209bc2c45993c935ca3cf9d3, type: 3}
+  dashSfxVolume: 1
 --- !u!95 &6654945476640845841
 Animator:
   serializedVersion: 7

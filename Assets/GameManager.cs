@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class GameManager : MonoBehaviour
@@ -10,6 +11,8 @@ public class GameManager : MonoBehaviour
 
     [Header("复活设置")]
     public Vector3 lastCheckpointPos;
+    [Tooltip("进入本关时玩家出生点；未激活任何存档点时 - 键复活落点")]
+    public Vector3 levelDefaultSpawnPos;
     public Image fadeImage;
     public float fadeSpeed = 2f;
 
@@ -43,12 +46,114 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void Start()
+    void OnEnable()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Hero");
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        currentActiveCheckpoint = null;
+        GameObject player = GameObject.FindGameObjectWithTag(HeroTag);
         if (player != null)
         {
-            lastCheckpointPos = player.transform.position;
+            Vector3 p = player.transform.position;
+            lastCheckpointPos = p;
+            levelDefaultSpawnPos = p;
+        }
+    }
+
+    void Update()
+    {
+        if (MinusKeyDown())
+            TryCheatRespawnNearestOrDefault();
+    }
+
+    static bool MinusKeyDown()
+    {
+        return Input.GetKeyDown(KeyCode.KeypadMinus)
+            || Input.GetKeyDown(KeyCode.Minus)
+            || (Input.GetKeyDown(KeyCode.Underscore) && (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)));
+    }
+
+    /// <summary>
+    /// - 键：已踩过存档点时传送到场景中离玩家最近的 Checkpoint；否则传送到本关初始出生点。无渐隐，并重置部分关卡状态。
+    /// </summary>
+    public void TryCheatRespawnNearestOrDefault()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag(HeroTag);
+        if (player == null) return;
+
+        bool hasActivatedCheckpoint = currentActiveCheckpoint != null;
+
+        Vector3 target;
+        if (!hasActivatedCheckpoint)
+        {
+            target = levelDefaultSpawnPos;
+        }
+        else
+        {
+            Checkpoint[] all = Object.FindObjectsByType<Checkpoint>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+            if (all == null || all.Length == 0)
+                target = levelDefaultSpawnPos;
+            else
+            {
+                Vector3 p = player.transform.position;
+                Checkpoint best = all[0];
+                float bestSq = (best.transform.position - p).sqrMagnitude;
+                for (int i = 1; i < all.Length; i++)
+                {
+                    float sq = (all[i].transform.position - p).sqrMagnitude;
+                    if (sq < bestSq)
+                    {
+                        bestSq = sq;
+                        best = all[i];
+                    }
+                }
+                target = best.transform.position;
+            }
+        }
+
+        player.transform.position = target;
+        Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
+        if (rb != null)
+            rb.linearVelocity = Vector2.zero;
+
+        PlayerController pc = player.GetComponent<PlayerController>();
+        if (pc != null)
+        {
+            pc.ForceExitGhostMode();
+            pc.EndVoidDeathFreeze();
+            pc.SetDeathVisual(false);
+            pc.SetHurtColor(false);
+            pc.EnableControls();
+        }
+
+        AstraSkills astra = player.GetComponent<AstraSkills>();
+        if (astra != null)
+            astra.ResetToNormalGravity();
+
+        RegionCamera regionCam = Object.FindFirstObjectByType<RegionCamera>();
+        if (regionCam != null)
+            regionCam.SetFollowFrozen(false);
+
+        lastCheckpointPos = target;
+        ResetLevelStateAfterPlayerDeath(player);
+    }
+
+    void Start()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag(HeroTag);
+        if (player != null)
+        {
+            Vector3 p = player.transform.position;
+            lastCheckpointPos = p;
+            levelDefaultSpawnPos = p;
         }
 
         if (fadeImage != null)
@@ -56,7 +161,17 @@ public class GameManager : MonoBehaviour
             Color c = fadeImage.color;
             c.a = 0f;
             fadeImage.color = c;
+            SyncFadeRaycastTarget();
         }
+    }
+
+    /// <summary>
+    /// 与全屏 Fade 的 alpha 同步：全透明时不接收射线，避免上层通关 UI 被挡点击。
+    /// </summary>
+    public void SyncFadeRaycastTarget()
+    {
+        if (fadeImage == null) return;
+        fadeImage.raycastTarget = fadeImage.color.a > 0.01f;
     }
 
     // --- 新增：核心逻辑，确保只有一个绿 ---
@@ -213,6 +328,8 @@ public class GameManager : MonoBehaviour
                 fadeImage.color = c;
                 yield return null;
             }
+
+            SyncFadeRaycastTarget();
         }
     }
 

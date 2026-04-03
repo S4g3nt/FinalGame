@@ -82,8 +82,20 @@ public class RegionCamera : MonoBehaviour
     private void LateUpdate()
     {
         if (followFrozen) return;
-        if (target == null || isTransitioning) return;
-        
+        if (target == null) return;
+
+        // 幽灵模式：玩家始终在画面中心，不做竖直滞后也不做 Region 夹紧
+        PlayerController pc = target.GetComponent<PlayerController>();
+        if (pc != null && pc.GhostModeActive)
+        {
+            Vector3 centered = new Vector3(target.position.x, target.position.y, fixedZPosition);
+            transform.position = centered;
+            currentCameraY = centered.y;
+            return;
+        }
+
+        if (isTransitioning) return;
+
         // 计算目标摄像头位置
         Vector3 desiredPosition = CalculateCameraPosition();
         

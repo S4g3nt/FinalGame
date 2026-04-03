@@ -18,8 +18,23 @@ MonoBehaviour:
   m_PlatformId: 84a3bb9e7420477f885e98145999eb20
   m_PlatformBuildProfile:
     rid: 4655116790862184449
-  m_OverrideGlobalSceneList: 0
-  m_Scenes: []
+  m_OverrideGlobalSceneList: 1
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/0_Menu.unity
+    guid: 0320228cf438b1f4bab433ecd8c562a4
+  - enabled: 1
+    path: Assets/Scenes/1_Jett.unity
+    guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/2_Yoru.unity
+    guid: d8dbf796db3c4784cad7573f8a8cf6b2
+  - enabled: 1
+    path: Assets/Scenes/3_Raze.unity
+    guid: f7ef0ac35776c384fa32f40ede510206
+  - enabled: 1
+    path: Assets/Scenes/4_Astra.unity
+    guid: bd83804276ab9d342987e5e368be10c2
   m_HasScriptingDefines: 0
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:

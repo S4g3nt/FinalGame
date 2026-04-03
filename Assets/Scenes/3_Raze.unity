@@ -1578,6 +1578,14 @@ PrefabInstance:
       value: 24
       objectReference: {fileID: 0}
     - target: {fileID: 4994816690921460029, guid: 4de6edefcef86ac41bb8236d645a1a43, type: 3}
+      propertyPath: grenadeExplosionSfx
+      value: 
+      objectReference: {fileID: 8300000, guid: 36980b7b08f57dd41a50a0abf09729e9, type: 3}
+    - target: {fileID: 4994816690921460029, guid: 4de6edefcef86ac41bb8236d645a1a43, type: 3}
+      propertyPath: satchelExplosionSfx
+      value: 
+      objectReference: {fileID: 8300000, guid: 7a9cea0e8e4ee714986f3810f747a113, type: 3}
+    - target: {fileID: 4994816690921460029, guid: 4de6edefcef86ac41bb8236d645a1a43, type: 3}
       propertyPath: satchelKnockbackSpeedMultiplierCap
       value: 1.5
       objectReference: {fileID: 0}
@@ -2264,6 +2272,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   lastCheckpointPos: {x: 0, y: 0, z: 0}
+  levelDefaultSpawnPos: {x: 0, y: 0, z: 0}
   fadeImage: {fileID: 1891945321}
   fadeSpeed: 1.5
   voidDeathPopDuration: 0.2

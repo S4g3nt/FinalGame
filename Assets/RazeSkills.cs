@@ -105,6 +105,12 @@ public class RazeSkills : MonoBehaviour
     [Tooltip("销毁带 DestructibleTerrain 标签的碰撞体所在物体")]
     public float grenadeDestroyRadius = 2f;
 
+    [Header("音效")]
+    public AudioClip satchelExplosionSfx;
+    [Range(0f, 2f)] public float satchelExplosionSfxVolume = 1f;
+    public AudioClip grenadeExplosionSfx;
+    [Range(0f, 2f)] public float grenadeExplosionSfxVolume = 1f;
+
     [Header("手雷 — 生效范围示意")]
     public bool grenadeShowDestroyRadiusRing = true;
     [Min(0.05f)] public float grenadeBlastRingDuration = 0.55f;
@@ -114,6 +120,7 @@ public class RazeSkills : MonoBehaviour
 
     private PlayerController player;
     private Rigidbody2D rb;
+    AudioSource _sfx;
 
     private GameObject activeSatchel;
     private int satchelCharges = 2;
@@ -178,6 +185,24 @@ public class RazeSkills : MonoBehaviour
     {
         player = GetComponent<PlayerController>();
         rb = GetComponent<Rigidbody2D>();
+        _sfx = GetComponent<AudioSource>();
+        if (_sfx == null) _sfx = gameObject.AddComponent<AudioSource>();
+        _sfx.playOnAwake = false;
+        _sfx.spatialBlend = 0f;
+    }
+
+    /// <summary>由 <see cref="RazeSatchel"/> 引爆时调用。</summary>
+    public void PlaySatchelExplosionSound()
+    {
+        if (satchelExplosionSfx == null || _sfx == null) return;
+        _sfx.PlayOneShot(satchelExplosionSfx, satchelExplosionSfxVolume);
+    }
+
+    /// <summary>由 <see cref="RazeGrenade"/> 引爆时调用。</summary>
+    public void PlayGrenadeExplosionSound()
+    {
+        if (grenadeExplosionSfx == null || _sfx == null) return;
+        _sfx.PlayOneShot(grenadeExplosionSfx, grenadeExplosionSfxVolume);
     }
 
     void Update()
