@@ -9,6 +9,10 @@ public class GameManager : MonoBehaviour
 
     private const string HeroTag = "Hero";
 
+    [Header("场景跳转")]
+    [Tooltip("选关界面场景的名称，按 ESC 时会加载这个场景")]
+    public string levelSelectSceneName = "LevelSelect";
+
     [Header("复活设置")]
     public Vector3 lastCheckpointPos;
     [Tooltip("进入本关时玩家出生点；未激活任何存档点时 - 键复活落点")]
@@ -70,6 +74,12 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        // --- 新增：按 ESC 返回选关界面 ---
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ReturnToLevelSelect();
+        }
+
         if (MinusKeyDown())
             TryCheatRespawnNearestOrDefault();
     }
@@ -79,6 +89,44 @@ public class GameManager : MonoBehaviour
         return Input.GetKeyDown(KeyCode.KeypadMinus)
             || Input.GetKeyDown(KeyCode.Minus)
             || (Input.GetKeyDown(KeyCode.Underscore) && (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)));
+    }
+
+    /// <summary>
+    /// 退出当前关卡，返回选关场景
+    /// </summary>
+    public void ReturnToLevelSelect()
+    {
+        // 1. 强制把黑屏遮罩关掉，防止带着黑屏进选关界面
+        if (fadeImage != null)
+        {
+            Color c = fadeImage.color;
+            c.a = 0f;
+            fadeImage.color = c;
+            SyncFadeRaycastTarget();
+        }
+
+        // 2. 停止所有正在跑的协程（比如正在进行的复活倒计时）
+        StopAllCoroutines();
+
+        // 3. 恢复时间缩放（防止游戏处于暂停状态）
+        Time.timeScale = 1f;
+
+        // --- 新增：停止并销毁关卡内的背景音乐 ---
+        if (BGMPlayer.Instance != null)
+        {
+            Destroy(BGMPlayer.Instance.gameObject);
+            BGMPlayer.Instance = null; // 清空引用，方便后续进入新关卡时重新生成
+        }
+
+        // 4. 加载选关场景
+        if (!string.IsNullOrEmpty(levelSelectSceneName))
+        {
+            SceneManager.LoadScene(levelSelectSceneName);
+        }
+        else
+        {
+            Debug.LogError("未设置选关场景名称！请在 GameManager 面板的 Level Select Scene Name 中填入场景名。");
+        }
     }
 
     /// <summary>

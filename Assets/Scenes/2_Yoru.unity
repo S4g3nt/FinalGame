@@ -538,7 +538,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6952a43e3b74a654ea507bc35d648c94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  levelSelectSceneName: 0_Menu
   lastCheckpointPos: {x: 0, y: 0, z: 0}
+  levelDefaultSpawnPos: {x: 0, y: 0, z: 0}
   fadeImage: {fileID: 1891945321}
   fadeSpeed: 1.5
   voidDeathPopDuration: 0.2
@@ -3334,6 +3336,67 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 00400d495647c2941aa02822a90236ee, type: 3}
+--- !u!1001 &1095598263
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3612115864029693563, guid: 37507700670b3be4d9d2864509fead9d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -137.57236
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612115864029693563, guid: 37507700670b3be4d9d2864509fead9d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 8.65432
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612115864029693563, guid: 37507700670b3be4d9d2864509fead9d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612115864029693563, guid: 37507700670b3be4d9d2864509fead9d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612115864029693563, guid: 37507700670b3be4d9d2864509fead9d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612115864029693563, guid: 37507700670b3be4d9d2864509fead9d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612115864029693563, guid: 37507700670b3be4d9d2864509fead9d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612115864029693563, guid: 37507700670b3be4d9d2864509fead9d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612115864029693563, guid: 37507700670b3be4d9d2864509fead9d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612115864029693563, guid: 37507700670b3be4d9d2864509fead9d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6138514535687711488, guid: 37507700670b3be4d9d2864509fead9d, type: 3}
+      propertyPath: m_Name
+      value: BGM
+      objectReference: {fileID: 0}
+    - target: {fileID: 8828394514293406716, guid: 37507700670b3be4d9d2864509fead9d, type: 3}
+      propertyPath: sceneBGM
+      value: 
+      objectReference: {fileID: 8300000, guid: 31786324e8a0f104383cad06262636cc, type: 3}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 37507700670b3be4d9d2864509fead9d, type: 3}
 --- !u!1001 &1156744160
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16322,6 +16385,14 @@ PrefabInstance:
       propertyPath: obstacleLayer.m_Bits
       value: 2147483648
       objectReference: {fileID: 0}
+    - target: {fileID: 4759182909671197222, guid: c7e3625c4aed860459d963e8b44fa9cb, type: 3}
+      propertyPath: cloneReleaseSfxVolume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759182909671197222, guid: c7e3625c4aed860459d963e8b44fa9cb, type: 3}
+      propertyPath: anchorTeleportSfxVolume
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7998609992247879997, guid: c7e3625c4aed860459d963e8b44fa9cb, type: 3}
       propertyPath: m_LocalPosition.x
       value: -48.6
@@ -16385,6 +16456,7 @@ SceneRoots:
   - {fileID: 55060624}
   - {fileID: 2845586364471315158}
   - {fileID: 899470600}
+  - {fileID: 1095598263}
   - {fileID: 41888195}
   - {fileID: 1290810768}
   - {fileID: 1945654636}

@@ -1,6 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
-
 --- !u!1 &771001
 GameObject:
   m_ObjectHideFlags: 0
@@ -15,7 +14,7 @@ GameObject:
   - component: {fileID: 771005}
   - component: {fileID: 771006}
   m_Layer: 5
-  m_Name: LevelVictoryCanvas
+  m_Name: VictoryCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +29,7 @@ RectTransform:
   m_GameObject: {fileID: 771001}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 771011}
@@ -66,7 +65,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 400
   m_TargetDisplay: 0
-
 --- !u!114 &771004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,7 +88,6 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 0
-
 --- !u!114 &771005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,7 +105,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-
 --- !u!114 &771006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,9 +128,8 @@ MonoBehaviour:
   levelSelectButton: {fileID: 771104}
   nextSceneName: 
   levelSelectSceneName: 0_Menu
-  collectiblesFormat: "Collected: {0} / {1}"
-  timeFormat: "Time: {0:mm\\:ss\\.f}"
-
+  collectiblesFormat: 'Collected: {0} / {1}'
+  timeFormat: 'Time: {0:mm\:ss\.f}'
 --- !u!1 &771010
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,7 +159,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
+  m_Children: []
   m_Father: {fileID: 771002}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -180,7 +175,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771010}
   m_CullTransparentMesh: 1
-
 --- !u!114 &771013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,7 +205,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
-
 --- !u!1 &771020
 GameObject:
   m_ObjectHideFlags: 0
@@ -263,7 +256,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771020}
   m_CullTransparentMesh: 1
-
 --- !u!114 &771023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -294,7 +286,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
-
 --- !u!1 &771030
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,7 +315,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
+  m_Children: []
   m_Father: {fileID: 771021}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -340,7 +331,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771030}
   m_CullTransparentMesh: 1
-
 --- !u!114 &771033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -433,7 +423,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
-
 --- !u!1 &771040
 GameObject:
   m_ObjectHideFlags: 0
@@ -463,7 +452,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
+  m_Children: []
   m_Father: {fileID: 771021}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -479,7 +468,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771040}
   m_CullTransparentMesh: 1
-
 --- !u!114 &771043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -572,7 +560,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
-
 --- !u!1 &771050
 GameObject:
   m_ObjectHideFlags: 0
@@ -602,7 +589,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
+  m_Children: []
   m_Father: {fileID: 771021}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -618,7 +605,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771050}
   m_CullTransparentMesh: 1
-
 --- !u!114 &771053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -711,7 +697,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
-
 --- !u!1 &771060
 GameObject:
   m_ObjectHideFlags: 0
@@ -759,7 +744,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771060}
   m_CullTransparentMesh: 1
-
 --- !u!114 &771063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -790,7 +774,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
-
 --- !u!114 &771064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -835,7 +818,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
-
 --- !u!1 &771070
 GameObject:
   m_ObjectHideFlags: 0
@@ -865,7 +847,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
+  m_Children: []
   m_Father: {fileID: 771061}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -881,7 +863,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771070}
   m_CullTransparentMesh: 1
-
 --- !u!114 &771073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -974,7 +955,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
-
 --- !u!1 &771080
 GameObject:
   m_ObjectHideFlags: 0
@@ -1022,7 +1002,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771080}
   m_CullTransparentMesh: 1
-
 --- !u!114 &771083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1053,7 +1032,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
-
 --- !u!114 &771084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1098,7 +1076,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
-
 --- !u!1 &771090
 GameObject:
   m_ObjectHideFlags: 0
@@ -1128,7 +1105,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
+  m_Children: []
   m_Father: {fileID: 771081}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1144,7 +1121,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771090}
   m_CullTransparentMesh: 1
-
 --- !u!114 &771093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1237,7 +1213,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
-
 --- !u!1 &771100
 GameObject:
   m_ObjectHideFlags: 0
@@ -1285,7 +1260,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771100}
   m_CullTransparentMesh: 1
-
 --- !u!114 &771103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1316,7 +1290,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
-
 --- !u!114 &771104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1361,7 +1334,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
-
 --- !u!1 &771110
 GameObject:
   m_ObjectHideFlags: 0
@@ -1391,7 +1363,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
+  m_Children: []
   m_Father: {fileID: 771101}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1407,7 +1379,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771110}
   m_CullTransparentMesh: 1
-
 --- !u!114 &771113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1500,4 +1471,3 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
-
