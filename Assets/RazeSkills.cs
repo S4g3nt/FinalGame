@@ -207,6 +207,9 @@ public class RazeSkills : MonoBehaviour
 
     void Update()
     {
+        if (GameplayInputLock.IsLocked)
+            return;
+
         bool grounded = player.IsGrounded;
 
         if (!player.ControlsEnabled || player.IsSkillLocked)

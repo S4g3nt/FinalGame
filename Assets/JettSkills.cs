@@ -20,6 +20,8 @@ public class JettSkills : MonoBehaviour
     public float dashDuration = 0.2f; 
     public GameObject ghostPrefab; 
     public float ghostSpawnInterval = 0.03f; 
+    [Tooltip("按下 L 后多帧采样方向键并做“或”合并，避免 W 与 L 同按时 Vertical 轴晚一帧仍为 0")]
+    [SerializeField] int dashDirectionSampleFrames = 4;
 
     [Header("音效")]
     public AudioClip dashSfx;
@@ -46,6 +48,9 @@ public class JettSkills : MonoBehaviour
 
     void Update()
     {
+        if (GameplayInputLock.IsLocked)
+            return;
+
         if (!player.ControlsEnabled)
         {
             StopAllVFX();
@@ -108,13 +113,24 @@ public class JettSkills : MonoBehaviour
         float originalGravity = player.Rb.gravityScale;
         player.Rb.gravityScale = 0; 
 
-        // 【核心修复点】：在这里直接、实时地获取玩家瞬间的输入！
-        // 避开了依赖 PlayerController 读取带来的延迟或锁死问题
-        float dashH = Input.GetAxisRaw("Horizontal");
-        float dashV = Input.GetAxisRaw("Vertical");
-        Vector2 directInput = new Vector2(dashH, dashV);
+        bool anyLeft = false, anyRight = false, anyDown = false, anyUp = false;
+        int samples = Mathf.Max(1, dashDirectionSampleFrames);
+        for (int i = 0; i < samples; i++)
+        {
+            ReadMovementKeysHeld(out bool kl, out bool kr, out bool kd, out bool ku);
+            anyLeft |= kl;
+            anyRight |= kr;
+            anyDown |= kd;
+            anyUp |= ku;
+            if (i < samples - 1)
+                yield return null;
+        }
 
-        // 使用实时获取的 directInput 来决定冲刺方向
+        Vector2 directInput = BuildCardinalInputFromKeys(anyLeft, anyRight, anyDown, anyUp);
+        if (directInput == Vector2.zero)
+            directInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+
+        // 使用采样得到的 directInput 来决定冲刺方向
         Vector2 dashDirVector = directInput == Vector2.zero ? new Vector2(-transform.localScale.x, 0f) : directInput.normalized;
 
         if (dashDirVector.x != 0)
@@ -159,6 +175,31 @@ public class JettSkills : MonoBehaviour
         player.IsSkillLocked = false; 
     }
     
+    static void ReadMovementKeysHeld(out bool left, out bool right, out bool down, out bool up)
+    {
+        left = Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow);
+        right = Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
+        down = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
+        up = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
+    }
+
+    static Vector2 BuildCardinalInputFromKeys(bool left, bool right, bool down, bool up)
+    {
+        float hx = 0f;
+        if (right && !left) hx = 1f;
+        else if (left && !right) hx = -1f;
+        else if (left || right)
+            hx = Mathf.Sign(Input.GetAxisRaw("Horizontal"));
+
+        float hy = 0f;
+        if (up && !down) hy = 1f;
+        else if (down && !up) hy = -1f;
+        else if (up || down)
+            hy = Mathf.Sign(Input.GetAxisRaw("Vertical"));
+
+        return new Vector2(hx, hy);
+    }
+
     void SetGhostColor(SpriteRenderer targetSr, Color targetColor)
     {
         // targetSr.color = targetColor; 

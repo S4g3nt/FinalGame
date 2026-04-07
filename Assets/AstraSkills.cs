@@ -171,6 +171,9 @@ public class AstraSkills : MonoBehaviour
 
     void Update()
     {
+        if (GameplayInputLock.IsLocked)
+            return;
+
         if (!player.ControlsEnabled || player.IsSkillLocked)
             return;
 

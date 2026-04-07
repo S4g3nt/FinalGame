@@ -152,6 +152,13 @@ public class RegionManager : MonoBehaviour
         );
     }
     
+    /// <summary>Call after the Hero GameObject was replaced (e.g. campfire swap).</summary>
+    public void RefreshPlayerRigidbody()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Hero");
+        playerRigidbody = player != null ? player.GetComponent<Rigidbody2D>() : null;
+    }
+
     // 注册区域
     public void RegisterRegion(Region region)
     {

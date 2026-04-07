@@ -47,6 +47,9 @@ public class YoruSkills : MonoBehaviour
 
     void Update()
     {
+        if (GameplayInputLock.IsLocked)
+            return;
+
         HandleAnchorSkill();
         HandleCloneSkill();
     }

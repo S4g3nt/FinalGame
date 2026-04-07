@@ -26,12 +26,24 @@ public class RegionCamera : MonoBehaviour
     // 竖直方向跟踪状态
     private float currentCameraY = 0f;  // 当前摄像头Y坐标
     
+    /// <summary>After swapping the hero prefab, re-point follow target at the new Hero.</summary>
+    public void RebindHeroTarget()
+    {
+        if (cam == null) cam = GetComponent<Camera>();
+        GameObject h = GameObject.FindGameObjectWithTag("Hero");
+        target = h != null ? h.transform : null;
+        if (target != null)
+            SetInitialPosition();
+    }
+
     private void Start()
     {
         cam = GetComponent<Camera>();
         if (target == null)
         {
-            target = GameObject.FindGameObjectWithTag("Hero").transform;
+            GameObject h = GameObject.FindGameObjectWithTag("Hero");
+            if (h != null)
+                target = h.transform;
         }
         
         if (target != null)

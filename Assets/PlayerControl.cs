@@ -91,7 +91,10 @@ public class PlayerController : MonoBehaviour
         if (voidDeathActive)
             return;
 
-        if (Input.GetKeyDown(KeyCode.P))
+        if (GameplayInputLock.IsLocked)
+            return;
+
+        if (GameInputSettings.GetGhostDown())
             ToggleGhostMode();
 
         if (ghostModeActive)
@@ -135,7 +138,7 @@ public class PlayerController : MonoBehaviour
         
         UpdateCommonPhysicsAndAnimation(moveInput);
 
-        if (Input.GetKeyDown(KeyCode.K))
+        if (GameInputSettings.GetJumpDown())
         {
             Debug.Log($"尝试跳跃! 地面状态: {IsGrounded}, 控制锁定: {IsSkillLocked}");
             if (IsGrounded && !IsSkillLocked)

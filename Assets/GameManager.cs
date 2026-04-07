@@ -10,8 +10,14 @@ public class GameManager : MonoBehaviour
     private const string HeroTag = "Hero";
 
     [Header("场景跳转")]
-    [Tooltip("选关界面场景的名称，按 ESC 时会加载这个场景")]
+    [Tooltip("选关界面场景的名称")]
     public string levelSelectSceneName = "0_Menu";
+
+    [Header("暂停菜单")]
+    [Tooltip("闯关场景内按 Esc 打开暂停菜单；关闭此项则 Esc 仍直接回主菜单")]
+    public bool usePauseMenuInLevels = true;
+
+    LevelPauseMenu pauseMenu;
 
     [Header("复活设置")]
     public Vector3 lastCheckpointPos;
@@ -37,17 +43,35 @@ public class GameManager : MonoBehaviour
     // --- 新增：记录当前激活的存档点脚本 ---
     private Checkpoint currentActiveCheckpoint;
 
+    public bool IsLevelPaused => usePauseMenuInLevels && pauseMenu != null && pauseMenu.IsPaused;
+
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            GameInputSettings.EnsureLoaded();
+            if (usePauseMenuInLevels)
+                EnsureLevelPauseMenu();
         }
         else
         {
             Destroy(gameObject);
         }
+    }
+
+    void EnsureLevelPauseMenu()
+    {
+        pauseMenu = GetComponentInChildren<LevelPauseMenu>(true);
+        if (pauseMenu == null)
+        {
+            var go = new GameObject("LevelPauseMenu");
+            go.transform.SetParent(transform, false);
+            pauseMenu = go.AddComponent<LevelPauseMenu>();
+        }
+
+        pauseMenu.BindGameManager(this);
     }
 
     void OnEnable()
@@ -77,21 +101,34 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        // --- 新增：按 ESC 返回选关界面 ---
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Instance != this)
+            return;
+
+        if (IsInGameplayScene())
         {
-            ReturnToLevelSelect();
+            if (usePauseMenuInLevels && pauseMenu != null)
+            {
+                if (Input.GetKeyDown(KeyCode.Escape))
+                    pauseMenu.OnEscapePressed();
+            }
+            else if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                ReturnToLevelSelect();
+            }
         }
 
-        if (MinusKeyDown())
+        if (GameplayInputLock.IsLocked)
+            return;
+
+        if (GameInputSettings.GetCheckpointRespawnDown())
             TryCheatRespawnNearestOrDefault();
     }
 
-    static bool MinusKeyDown()
+    bool IsInGameplayScene()
     {
-        return Input.GetKeyDown(KeyCode.KeypadMinus)
-            || Input.GetKeyDown(KeyCode.Minus)
-            || (Input.GetKeyDown(KeyCode.Underscore) && (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)));
+        if (string.IsNullOrEmpty(levelSelectSceneName))
+            return true;
+        return SceneManager.GetActiveScene().name != levelSelectSceneName;
     }
 
     /// <summary>
