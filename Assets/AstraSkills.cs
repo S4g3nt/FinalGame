@@ -174,7 +174,7 @@ public class AstraSkills : MonoBehaviour
         if (GameplayInputLock.IsLocked)
             return;
 
-        if (!player.ControlsEnabled || player.IsSkillLocked)
+        if (!player.ControlsEnabled || player.IsSkillLocked || player.IsAwaitingRespawn)
             return;
 
         // 【充电逻辑】：如果玩家着地，并且已经过了翻转缓冲期，则充满电

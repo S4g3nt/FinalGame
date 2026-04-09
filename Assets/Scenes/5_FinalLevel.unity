@@ -1988,6 +1988,8 @@ MonoBehaviour:
   voidDeathPopHorizontalSpread: 2.4
   voidDeathFallDownSpeed: -12
   voidDeathFallGravityMultiplier: 3.5
+  deathSfx: {fileID: 8300000, guid: f6a2c8e14b534d8e9a1f2c3d4e5f6078, type: 3}
+  deathSfxVolume: 1
 --- !u!1001 &254625072
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -85594,7 +85596,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 771006, guid: f3e4d5c6b7a899887766554433221102, type: 3}
       propertyPath: nextSceneName
-      value: 4_Astra
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

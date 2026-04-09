@@ -212,7 +212,7 @@ public class RazeSkills : MonoBehaviour
 
         bool grounded = player.IsGrounded;
 
-        if (!player.ControlsEnabled || player.IsSkillLocked)
+        if (!player.ControlsEnabled || player.IsSkillLocked || player.IsAwaitingRespawn)
         {
             wasGroundedLastFrame = grounded;
             grenadeAimHeld = false;

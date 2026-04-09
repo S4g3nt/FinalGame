@@ -1232,6 +1232,8 @@ MonoBehaviour:
   voidDeathPopHorizontalSpread: 2.4
   voidDeathFallDownSpeed: -12
   voidDeathFallGravityMultiplier: 3.5
+  deathSfx: {fileID: 8300000, guid: f6a2c8e14b534d8e9a1f2c3d4e5f6078, type: 3}
+  deathSfxVolume: 1
 --- !u!1001 &294198392
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2134,7 +2136,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 771006, guid: f3e4d5c6b7a899887766554433221102, type: 3}
       propertyPath: nextSceneName
-      value: 2_Yoru
+      value: 4_Astra
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -44130,7 +44132,6 @@ SceneRoots:
   - {fileID: 730353573}
   - {fileID: 932310035}
   - {fileID: 821955760}
-  - {fileID: 6707945032414463720}
   - {fileID: 589068339}
   - {fileID: 1654666934}
   - {fileID: 1621814325}
@@ -44163,3 +44164,4 @@ SceneRoots:
   - {fileID: 809526033}
   - {fileID: 2144290292}
   - {fileID: 1777134961}
+  - {fileID: 6707945032414463720}

@@ -40,6 +40,13 @@ public class GameManager : MonoBehaviour
     [Tooltip("下坠阶段重力缩放相对角色原 gravityScale 的倍数")]
     public float voidDeathFallGravityMultiplier = 3.5f;
 
+    [Header("音效")]
+    [Tooltip("英雄进入死亡/复活流程时播放（默认 Assets/sound/DEATH.mp3）")]
+    public AudioClip deathSfx;
+    [Range(0f, 2f)] public float deathSfxVolume = 1f;
+
+    AudioSource _deathAudio;
+
     // --- 新增：记录当前激活的存档点脚本 ---
     private Checkpoint currentActiveCheckpoint;
 
@@ -193,6 +200,7 @@ public class GameManager : MonoBehaviour
             pc.SetDeathVisual(false);
             pc.SetHurtColor(false);
             pc.EnableControls();
+            pc.SetAwaitingRespawn(false);
         }
 
         AstraSkills astra = player.GetComponent<AstraSkills>();
@@ -277,6 +285,12 @@ public class GameManager : MonoBehaviour
         // 已在复活流程中（标签已剥掉）：忽略重复死亡，避免叠加重叠渐隐
         if (!player.CompareTag(HeroTag)) return;
 
+        PlayDeathSfx();
+
+        PlayerController pcStart = player.GetComponent<PlayerController>();
+        if (pcStart != null)
+            pcStart.SetAwaitingRespawn(true);
+
         player.tag = "Untagged";
         StartCoroutine(RespawnSequenceStandard(player));
     }
@@ -287,8 +301,31 @@ public class GameManager : MonoBehaviour
         if (player == null) return;
         if (!player.CompareTag(HeroTag)) return;
 
+        PlayDeathSfx();
+
+        PlayerController pcStart = player.GetComponent<PlayerController>();
+        if (pcStart != null)
+            pcStart.SetAwaitingRespawn(true);
+
         player.tag = "Untagged";
         StartCoroutine(VoidDeathFallRoutine(player));
+    }
+
+    void EnsureDeathAudioSource()
+    {
+        if (_deathAudio != null) return;
+        _deathAudio = GetComponent<AudioSource>();
+        if (_deathAudio == null)
+            _deathAudio = gameObject.AddComponent<AudioSource>();
+        _deathAudio.playOnAwake = false;
+        _deathAudio.spatialBlend = 0f;
+    }
+
+    void PlayDeathSfx()
+    {
+        if (deathSfx == null) return;
+        EnsureDeathAudioSource();
+        _deathAudio.PlayOneShot(deathSfx, deathSfxVolume);
     }
 
     IEnumerator RespawnSequenceStandard(GameObject player)
@@ -384,6 +421,7 @@ public class GameManager : MonoBehaviour
             pc.SetHurtColor(false);
             pc.EnableControls();
             pc.EndVoidDeathFreeze();
+            pc.SetAwaitingRespawn(false);
         }
 
         AstraSkills astra = player.GetComponent<AstraSkills>();
