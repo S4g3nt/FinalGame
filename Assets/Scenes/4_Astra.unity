@@ -576,6 +576,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RegionManager
   allRegions: []
   transitionTime: 0.1
+  enableRegionLock: 1
+  allAirWalls: []
 --- !u!4 &156962598
 Transform:
   m_ObjectHideFlags: 0
@@ -916,6 +918,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   levelSelectSceneName: 0_Menu
+  usePauseMenuInLevels: 1
   lastCheckpointPos: {x: 0, y: 0, z: 0}
   levelDefaultSpawnPos: {x: 0, y: 0, z: 0}
   fadeImage: {fileID: 1891945321}
@@ -1589,7 +1592,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 771006, guid: f3e4d5c6b7a899887766554433221102, type: 3}
       propertyPath: nextSceneName
-      value: 3_Raze
+      value: 1_Jett
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

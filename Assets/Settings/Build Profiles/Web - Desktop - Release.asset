@@ -35,6 +35,9 @@ MonoBehaviour:
   - m_enabled: 1
     m_path: Assets/Scenes/4_Astra.unity
     m_guid: bd83804276ab9d342987e5e368be10c2
+  - m_enabled: 1
+    m_path: Assets/Scenes/5_FinalLevel.unity
+    m_guid: 9e3ba18500d41f14a864b3521b8217d0
   m_HasScriptingDefines: 0
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:

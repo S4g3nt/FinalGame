@@ -2136,7 +2136,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 771006, guid: f3e4d5c6b7a899887766554433221102, type: 3}
       propertyPath: nextSceneName
-      value: 4_Astra
+      value: 3_Raze
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

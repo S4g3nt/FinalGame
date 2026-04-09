@@ -256,7 +256,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 771006, guid: f3e4d5c6b7a899887766554433221102, type: 3}
       propertyPath: nextSceneName
-      value: 1_Jett
+      value: 4_Astra
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17674,6 +17674,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RegionManager
   allRegions: []
   transitionTime: 0.1
+  enableRegionLock: 1
+  allAirWalls: []
 --- !u!4 &1945654636
 Transform:
   m_ObjectHideFlags: 0
