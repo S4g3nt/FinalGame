@@ -1232,6 +1232,8 @@ MonoBehaviour:
   voidDeathPopHorizontalSpread: 2.4
   voidDeathFallDownSpeed: -12
   voidDeathFallGravityMultiplier: 3.5
+  deathSfx: {fileID: 8300000, guid: f6a2c8e14b534d8e9a1f2c3d4e5f6078, type: 3}
+  deathSfxVolume: 1
 --- !u!1001 &294198392
 PrefabInstance:
   m_ObjectHideFlags: 0

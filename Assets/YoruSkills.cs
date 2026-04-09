@@ -11,7 +11,8 @@ public class YoruSkills : MonoBehaviour
     public GameObject clonePrefab;
 
     [Header("技能参数")]
-    public float spawnOffset = 1.0f; // 技能释放在角色前方的距离
+    [Tooltip("假人向前生成的最大距离；锚点默认在脚下生成，不使用此距离")]
+    public float spawnOffset = 1.0f;
     
     [Tooltip("假人生成的高度偏移（正数，防卡地）")]
     public float cloneHeightOffset = 0.5f; 
@@ -36,9 +37,11 @@ public class YoruSkills : MonoBehaviour
     private GameObject currentClone;
 
     AudioSource _sfx;
+    PlayerController _player;
 
     void Awake()
     {
+        _player = GetComponent<PlayerController>();
         _sfx = GetComponent<AudioSource>();
         if (_sfx == null) _sfx = gameObject.AddComponent<AudioSource>();
         _sfx.playOnAwake = false;
@@ -48,6 +51,8 @@ public class YoruSkills : MonoBehaviour
     void Update()
     {
         if (GameplayInputLock.IsLocked)
+            return;
+        if (_player != null && _player.IsAwaitingRespawn)
             return;
 
         HandleAnchorSkill();
@@ -70,8 +75,8 @@ public class YoruSkills : MonoBehaviour
             // 如果场上没有锚点（或者锚点已经因为超时等原因被销毁了）
             if (currentAnchor == null)
             {
-                // 放置锚点 (使用防卡墙的安全位置)
-                Vector3 spawnPosition = GetSafeSpawnPosition(anchorHeightOffset); 
+                // 锚点在脚下生成，避免门前前方射线把位置挤进门缝/地下
+                Vector3 spawnPosition = GetSafeSpawnPosition(anchorHeightOffset, atFeet: true); 
                 currentAnchor = Instantiate(anchorPrefab, spawnPosition, Quaternion.identity);
                 SyncDirection(currentAnchor);
                 TryIgnoreAnchorCloneCollisions();
@@ -132,33 +137,32 @@ public class YoruSkills : MonoBehaviour
         }
     }
 
-        // 获取防卡墙的安全生成位置
-    private Vector3 GetSafeSpawnPosition(float heightOffset)
+    // 获取防卡墙的安全生成位置；atFeet 时锚点与角色同 X，不做前方射线（避免门前卡缝/卡地）
+    private Vector3 GetSafeSpawnPosition(float heightOffset, bool atFeet = false)
     {
-        float facingDirection = -Mathf.Sign(transform.localScale.x);
-        
-        // 射线起点：角色的中心 X，加上对应生成物的高度偏移 Y
         Vector3 startPos = transform.position + new Vector3(0, heightOffset, 0);
-        Vector2 castDir = new Vector2(facingDirection, 0);
-        
-        // 向前方发射射线，最大检测距离为 spawnOffset
-        RaycastHit2D hit = Physics2D.Raycast(startPos, castDir, spawnOffset, obstacleLayer);
-        
         Vector3 horizontalPos;
-        if (hit.collider != null)
+
+        if (atFeet)
         {
-            // 如果碰到了墙壁，实际生成距离 = 射线击中墙壁的距离 - 缓冲距离
-            float safeDistance = hit.distance - wallBufferDistance;
-            
-            // 防止算出的距离为负数（比如玩家自己已经嵌在墙里了，最低在距自己 0 的位置生成）
-            safeDistance = Mathf.Max(0, safeDistance);
-            
-            horizontalPos = startPos + new Vector3(facingDirection * safeDistance, 0, 0);
+            horizontalPos = startPos;
         }
         else
         {
-            // 前方没有墙壁阻挡，直接按最大距离生成
-            horizontalPos = startPos + new Vector3(facingDirection * spawnOffset, 0, 0);
+            float facingDirection = -Mathf.Sign(transform.localScale.x);
+            Vector2 castDir = new Vector2(facingDirection, 0);
+            RaycastHit2D hit = Physics2D.Raycast(startPos, castDir, spawnOffset, obstacleLayer);
+
+            if (hit.collider != null)
+            {
+                float safeDistance = hit.distance - wallBufferDistance;
+                safeDistance = Mathf.Max(0, safeDistance);
+                horizontalPos = startPos + new Vector3(facingDirection * safeDistance, 0, 0);
+            }
+            else
+            {
+                horizontalPos = startPos + new Vector3(facingDirection * spawnOffset, 0, 0);
+            }
         }
         
         // 垂直检测：防止生成在地面以下

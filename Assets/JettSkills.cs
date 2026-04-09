@@ -51,6 +51,12 @@ public class JettSkills : MonoBehaviour
         if (GameplayInputLock.IsLocked)
             return;
 
+        if (player.IsAwaitingRespawn)
+        {
+            StopAllVFX();
+            return;
+        }
+
         if (!player.ControlsEnabled)
         {
             StopAllVFX();
@@ -77,7 +83,7 @@ public class JettSkills : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!player.ControlsEnabled || isDashing) return;
+        if (player.IsAwaitingRespawn || !player.ControlsEnabled || isDashing) return;
         
         // 缓降物理处理
         float currentVelocityY = player.Rb.linearVelocity.y;

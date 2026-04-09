@@ -43,7 +43,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public bool IsSkillLocked { get; set; } = false; 
+    public bool IsSkillLocked { get; set; } = false;
+
+    /// <summary>自触发死亡/复活流程起至 Respawn 协程完成前为 true；技能脚本应忽略技能键。</summary>
+    public bool IsAwaitingRespawn { get; private set; }
+
+    public void SetAwaitingRespawn(bool value) => IsAwaitingRespawn = value;
     public Rigidbody2D Rb { get; private set; }
     public SpriteRenderer Sr { get; private set; }
     public Animator Anim { get; private set; }
