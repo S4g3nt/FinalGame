@@ -177,6 +177,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2147483648
   controlsEnabled: 1
+  ghostMoveSpeed: 32
 --- !u!61 &201784549546538210
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -243,6 +244,9 @@ MonoBehaviour:
   dashDuration: 0.1
   ghostPrefab: {fileID: 8787149846499474545, guid: d8b7875d69914e242ae0ff4148f04947, type: 3}
   ghostSpawnInterval: 0.03
+  dashDirectionSampleFrames: 4
+  dashSfx: {fileID: 0}
+  dashSfxVolume: 1
 --- !u!114 &-2036604819423668067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,7 +259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bd463f2d406d3941a971235d2ce8167, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AstraSkills
-  gravityToggleKey: 113
+  gravityToggleKey: 106
   flipSpriteWhenInverted: 1
   invertedGravityStrength: 0.93
   gravityToggleSfx: {fileID: 8300000, guid: d9086471d21ffac448d5d9720b4d29d6, type: 3}

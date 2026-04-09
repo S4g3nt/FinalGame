@@ -2075,6 +2075,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   levelSelectSceneName: 0_Menu
+  usePauseMenuInLevels: 1
   lastCheckpointPos: {x: 0, y: 0, z: 0}
   levelDefaultSpawnPos: {x: 0, y: 0, z: 0}
   fadeImage: {fileID: 1891945321}
@@ -2086,7 +2087,7 @@ MonoBehaviour:
   voidDeathFallDownSpeed: -12
   voidDeathFallGravityMultiplier: 3.5
   deathSfx: {fileID: 8300000, guid: f6a2c8e14b534d8e9a1f2c3d4e5f6078, type: 3}
-  deathSfxVolume: 1
+  deathSfxVolume: 0.1
 --- !u!1001 &256770568
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8877,6 +8878,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RegionManager
   allRegions: []
   transitionTime: 0.1
+  enableRegionLock: 1
+  allAirWalls: []
 --- !u!4 &730353573
 Transform:
   m_ObjectHideFlags: 0
