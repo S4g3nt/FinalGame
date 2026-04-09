@@ -94,7 +94,12 @@ public class RegionCamera : MonoBehaviour
     private void LateUpdate()
     {
         if (followFrozen) return;
-        if (target == null) return;
+        if (target == null)
+        {
+            GameObject h = GameObject.FindGameObjectWithTag("Hero");
+            if (h != null)
+                target = h.transform;
+        }
 
         // 幽灵模式：玩家始终在画面中心，不做竖直滞后也不做 Region 夹紧
         PlayerController pc = target.GetComponent<PlayerController>();
